@@ -1,0 +1,89 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --background: #FAF8F5;
+    --foreground: #12110E;
+    
+    --card: #FFFFFF;
+    --card-foreground: #12110E;
+
+    --popover: #FFFFFF;
+    --popover-foreground: #12110E;
+
+    --dark-surface: #12110E;
+    --dark-surface-card: #1C1A17;
+    --dark-surface-foreground: #FAF8F5;
+
+    --primary: #12110E;
+    --primary-foreground: #FAF8F5;
+
+    --accent: #E85D2C;
+    --accent-hover: #D44E1F;
+    --accent-foreground: #FFFFFF;
+    --accent-subtle: #FFF0EB;
+
+    --muted: #F0ECE4;
+    --muted-foreground: #6B665F;
+
+    --border: #E4DFD5;
+    --border-dark: #2B2823;
+    
+    --radius: 0px;
+  }
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  overflow-x: hidden;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #FAF8F5;
+}
+::-webkit-scrollbar-thumb {
+  background: #D5CFC4;
+  border-radius: 0px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #B3ADA1;
+}
+
+/* Hide scrollbar for horizontal product carousels */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Image Zoom and Transitions */
+.image-zoom-container {
+  overflow: hidden;
+}
+.image-zoom-container img {
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.image-zoom-container:hover img {
+  transform: scale(1.06);
+}
+
+/* Streetwear Badge Glow */
+.badge-glow {
+  box-shadow: 0 0 15px rgba(232, 93, 44, 0.4);
+}
+
+/* Active Filter Glow */
+.filter-active {
+  border-color: #E85D2C !important;
+  color: #12110E !important;
+  background-color: #FFF0EB !important;
+}

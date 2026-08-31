@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 80" width="100%" height="100%" fill="currentColor">
+  <!-- CALLY WEAR OFFICIAL WORDMARK LOGO -->
+  <!-- // TODO: swap for real logo from @cally_wear -->
+  <g font-family="system-ui, -apple-system, sans-serif" font-weight="900" letter-spacing="-0.03em">
+    <text x="5" y="58" font-size="52" font-style="italic">CALLY</text>
+    <text x="210" y="58" font-size="52" font-weight="400" letter-spacing="0.08em" fill="#E85D2C">WEAR</text>
+  </g>
+  <rect x="5" y="68" width="55" height="4" fill="#E85D2C" />
+  <rect x="68" y="68" width="12" height="4" fill="currentColor" opacity="0.4" />
+</svg>
