@@ -24,14 +24,16 @@ import { formatPrice } from "@/lib/utils";
 
 export default function AccountPage() {
   const [mounted, setMounted] = useState(false);
-  const { user, isAuthenticated, logout } = useAuthStore();
+  const { user, isAuthenticated, logout, checkSession } = useAuthStore();
   const { orders } = useOrderStore();
   const { items: wishlistItems } = useWishlistStore();
   const [activeTab, setActiveTab] = useState<"orders" | "addresses" | "wishlist">("orders");
 
   useEffect(() => {
-    setMounted(true);
-  }, []);
+    checkSession().finally(() => {
+      setMounted(true);
+    });
+  }, [checkSession]);
 
   // Server-side & initial client render: secure logged-out state (Zero PII leak)
   if (!mounted || !isAuthenticated || !user) {

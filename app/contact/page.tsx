@@ -1,18 +1,50 @@
 "use client";
 
 import React, { useState } from "react";
-import { PhoneCall, MapPin, Mail, Clock, Send, CheckCircle2 } from "lucide-react";
+import { PhoneCall, MapPin, Mail, Clock, Send, CheckCircle2, AlertCircle } from "lucide-react";
 import { InstagramIcon } from "@/components/ui/icons";
 
 export default function ContactPage() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [subject, setSubject] = useState("");
   const [message, setMessage] = useState("");
+  const [honeypot, setHoneypot] = useState(""); // hidden bot-trap field
   const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSubmitted(true);
+    setLoading(true);
+    setError("");
+
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name,
+          email,
+          subject: subject || "General Inquiry",
+          message,
+          honeypot,
+        }),
+      });
+
+      const data = await res.json();
+      if (!res.ok) {
+        setError(data.error || "Failed to send message. Please try again.");
+        setLoading(false);
+        return;
+      }
+
+      setSubmitted(true);
+      setLoading(false);
+    } catch {
+      setError("Network error occurred while submitting message.");
+      setLoading(false);
+    }
   };
 
   return (
@@ -115,6 +147,13 @@ export default function ContactPage() {
               </p>
             </div>
 
+            {error && (
+              <div className="p-4 bg-rose-50 border border-rose-200 text-rose-700 text-xs flex items-center gap-2">
+                <AlertCircle className="w-4 h-4 shrink-0" />
+                <span>{error}</span>
+              </div>
+            )}
+
             {submitted ? (
               <div className="p-8 bg-[#FAF8F5] border border-[#E85D2C] text-center space-y-3 animate-in fade-in duration-300">
                 <CheckCircle2 className="w-10 h-10 text-[#E85D2C] mx-auto" />
@@ -127,6 +166,17 @@ export default function ContactPage() {
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-4">
+                {/* Honeypot field for bot trapping (invisible to real users) */}
+                <input
+                  type="text"
+                  name="cally_hp"
+                  value={honeypot}
+                  onChange={(e) => setHoneypot(e.target.value)}
+                  style={{ display: "none" }}
+                  tabIndex={-1}
+                  autoComplete="off"
+                />
+
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <label className="text-xs font-bold uppercase tracking-wider text-[#12110E] block mb-1">
@@ -164,6 +214,8 @@ export default function ContactPage() {
                   <input
                     type="text"
                     placeholder="e.g. Sizing Advice for Apex Tech Runner / Order #CW-84920"
+                    value={subject}
+                    onChange={(e) => setSubject(e.target.value)}
                     className="w-full p-3 bg-[#FAF8F5] border border-[#E4DFD5] text-xs font-medium focus:outline-none focus:border-black"
                   />
                 </div>
@@ -184,10 +236,11 @@ export default function ContactPage() {
 
                 <button
                   type="submit"
-                  className="px-8 py-4 bg-[#12110E] hover:bg-[#E85D2C] text-white font-display font-black text-xs uppercase tracking-wider transition-colors flex items-center gap-2 shadow-md"
+                  disabled={loading}
+                  className="px-8 py-4 bg-[#12110E] hover:bg-[#E85D2C] text-white font-display font-black text-xs uppercase tracking-wider transition-colors flex items-center gap-2 shadow-md disabled:opacity-50"
                 >
                   <Send className="w-4 h-4" />
-                  <span>Send Message</span>
+                  <span>{loading ? "Sending..." : "Send Message"}</span>
                 </button>
               </form>
             )}

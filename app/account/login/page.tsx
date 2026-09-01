@@ -3,38 +3,37 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Lock, Mail, ArrowRight } from "lucide-react";
+import { Lock, Mail, ArrowRight, AlertCircle } from "lucide-react";
 import { Logo } from "@/components/logo";
 import { useAuthStore } from "@/lib/store/auth-store";
 
 export default function LoginPage() {
   const router = useRouter();
-  const { login } = useAuthStore();
+  const { login, isLoading } = useAuthStore();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email || !password) {
       setError("Please enter both email and password.");
       return;
     }
-    setLoading(true);
     setError("");
-    setTimeout(() => {
-      login(email);
-      setLoading(false);
+
+    const result = await login(email, password);
+    if (result.success) {
       router.push("/account");
-    }, 500);
+    } else {
+      setError(result.error || "Invalid email or password.");
+    }
   };
 
   return (
     <div className="min-h-[80vh] flex items-center justify-center p-4 py-16 bg-[#FAF8F5]">
       <div className="w-full max-w-md bg-white border border-[#E4DFD5] p-8 space-y-6 shadow-sm">
         <div className="text-center space-y-2">
-          {/* // TODO: swap for real logo from @cally_wear */}
           <Logo size="lg" />
           <h1 className="font-display font-black text-2xl uppercase tracking-tight text-[#12110E] pt-2">
             Member Sign In
@@ -45,8 +44,9 @@ export default function LoginPage() {
         </div>
 
         {error && (
-          <div className="p-3 bg-rose-50 border border-rose-200 text-rose-700 text-xs font-medium">
-            {error}
+          <div className="p-3.5 bg-rose-50 border border-rose-200 text-rose-700 text-xs font-semibold flex items-center gap-2">
+            <AlertCircle className="w-4 h-4 shrink-0" />
+            <span>{error}</span>
           </div>
         )}
 
@@ -73,9 +73,9 @@ export default function LoginPage() {
               <label className="text-xs font-bold uppercase tracking-wider text-[#12110E]">
                 Password
               </label>
-              <a href="#" className="text-[11px] text-[#E85D2C] hover:underline font-semibold">
+              <span className="text-[11px] text-[#E85D2C] hover:underline font-semibold cursor-pointer">
                 Forgot?
-              </a>
+              </span>
             </div>
             <div className="relative">
               <Lock className="w-4 h-4 text-[#8C877E] absolute left-3.5 top-1/2 -translate-y-1/2" />
@@ -92,10 +92,10 @@ export default function LoginPage() {
 
           <button
             type="submit"
-            disabled={loading}
+            disabled={isLoading}
             className="w-full py-4 bg-[#12110E] hover:bg-[#E85D2C] text-white font-display font-black text-xs uppercase tracking-wider transition-colors flex items-center justify-center gap-2 shadow-md disabled:opacity-50"
           >
-            <span>{loading ? "Signing In..." : "Sign In to Account"}</span>
+            <span>{isLoading ? "Authenticating..." : "Sign In to Account"}</span>
             <ArrowRight className="w-4 h-4" />
           </button>
         </form>

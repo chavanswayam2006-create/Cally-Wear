@@ -86,24 +86,66 @@ export default function CheckoutPage() {
     setStep(2);
   };
 
-  const handlePlaceOrder = () => {
-    setIsProcessing(true);
+  const [checkoutError, setCheckoutError] = useState("");
 
-    // Simulated order placement
-    // TODO: Wire real payment gateway (e.g. Razorpay for India / Stripe) here in production
-    setTimeout(() => {
+  const handlePlaceOrder = async () => {
+    setIsProcessing(true);
+    setCheckoutError("");
+
+    try {
       const formData = getValues();
-      const orderNumber = generateOrderNumber();
+      const idempotencyKey = `idemp_${Date.now()}_${Math.random().toString(36).slice(2, 9)}`;
+
+      const res = await fetch("/api/checkout/create-order", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Idempotency-Key": idempotencyKey,
+        },
+        body: JSON.stringify({
+          items: items.map((item) => ({
+            productId: item.productId,
+            size: item.size,
+            color: item.color,
+            quantity: item.quantity,
+          })),
+          shippingAddress: {
+            firstName: formData.firstName,
+            lastName: formData.lastName,
+            email: formData.email,
+            phone: formData.phone,
+            address: formData.address,
+            apartment: formData.apartment || "",
+            city: formData.city,
+            state: formData.state,
+            pincode: formData.pincode,
+            country: "India",
+          },
+          shippingMethod,
+          paymentMethod,
+          promoCode,
+          idempotencyKey,
+        }),
+      });
+
+      const data = await res.json();
+      if (!res.ok) {
+        setCheckoutError(data.error || "Order checkout failed. Please check your details.");
+        setIsProcessing(false);
+        return;
+      }
+
+      const serverOrder = data.order;
       const newOrder: Order = {
-        id: `ord_${Date.now()}`,
-        orderNumber,
+        id: serverOrder.id,
+        orderNumber: serverOrder.orderNumber,
         createdAt: new Date().toISOString(),
-        status: "confirmed",
+        status: serverOrder.status,
         items: [...items],
-        subtotal,
-        discount,
-        shipping: shippingCost,
-        total: grandTotal,
+        subtotal: serverOrder.subtotal,
+        discount: serverOrder.discount,
+        shipping: serverOrder.shipping,
+        total: serverOrder.total,
         shippingAddress: {
           firstName: formData.firstName,
           lastName: formData.lastName,
@@ -124,9 +166,9 @@ export default function CheckoutPage() {
             : paymentMethod === "cod"
             ? "Cash on Delivery"
             : "Net Banking",
-        paymentStatus: paymentMethod === "cod" ? "pending" : "paid",
-        trackingNumber: `EXP-IN-${Math.floor(100000000 + Math.random() * 900000000)}`,
-        estimatedDelivery: "2–5 business days (metro cities 2–3, rest of India 3–5)",
+        paymentStatus: serverOrder.paymentStatus,
+        trackingNumber: serverOrder.trackingNumber,
+        estimatedDelivery: serverOrder.estimatedDelivery,
       };
 
       addOrder(newOrder);
@@ -145,7 +187,10 @@ export default function CheckoutPage() {
       clearCart();
       setIsProcessing(false);
       router.push(`/checkout/confirmation?orderId=${newOrder.orderNumber}`);
-    }, 1500);
+    } catch (err) {
+      setCheckoutError("A network error occurred while placing your order. Please try again.");
+      setIsProcessing(false);
+    }
   };
 
   if (items.length === 0 && !isProcessing) {
@@ -625,6 +670,12 @@ export default function CheckoutPage() {
                     </div>
                   )}
                 </div>
+
+                {checkoutError && (
+                  <div className="p-4 bg-rose-50 border border-rose-200 text-rose-700 text-xs font-semibold">
+                    {checkoutError}
+                  </div>
+                )}
 
                 {/* Final Submit CTA */}
                 <div className="pt-4 flex items-center justify-between border-t border-[#E4DFD5]">

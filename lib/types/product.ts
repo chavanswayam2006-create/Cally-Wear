@@ -70,7 +70,19 @@ export type Order = {
   id: string;
   orderNumber: string;
   createdAt: string;
-  status: "confirmed" | "processing" | "shipped" | "delivered";
+  status:
+    | "awaiting_payment"
+    | "pending"
+    | "paid"
+    | "confirmed"
+    | "packed"
+    | "in_transit"
+    | "processing"
+    | "shipped"
+    | "delivered"
+    | "cancelled"
+    | "refunded"
+    | "delivery_failed";
   items: CartItem[];
   subtotal: number;
   shipping: number;
@@ -78,7 +90,7 @@ export type Order = {
   total: number;
   shippingAddress: OrderShippingAddress;
   paymentMethod: string;
-  paymentStatus: "paid" | "pending";
+  paymentStatus: "paid" | "pending" | "failed" | "refunded";
   trackingNumber?: string;
   estimatedDelivery?: string;
 };

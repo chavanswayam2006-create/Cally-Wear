@@ -1,46 +1,69 @@
 "use client";
 
 import React, { useState } from "react";
-import Link from "next/link";
 import Image from "next/image";
-import { Truck, Search, Package, ArrowRight, ShieldCheck, CheckCircle2, Clock, MapPin, AlertCircle } from "lucide-react";
-import { useOrderStore } from "@/lib/store/order-store";
-import { formatPrice } from "@/lib/utils";
-import { Order } from "@/lib/types/product";
+import { Truck, Search, Package, CheckCircle2, Clock, MapPin, AlertCircle } from "lucide-react";
+
+interface ShipmentItem {
+  name: string;
+  image: string;
+  size: string;
+  color: string;
+  quantity: number;
+}
+
+interface ShipmentData {
+  orderNumber: string;
+  status: string;
+  createdAt: string;
+  estimatedDelivery: string;
+  trackingNumber: string;
+  carrier: string;
+  destination: {
+    city: string;
+    state: string;
+    country: string;
+    pincode: string;
+  };
+  items: ShipmentItem[];
+  timeline: Array<{ status: string; completed: boolean }>;
+}
 
 export default function TrackOrderPage() {
-  const { getOrderByNumber } = useOrderStore();
   const [orderNumber, setOrderNumber] = useState("");
   const [contactIdentifier, setContactIdentifier] = useState("");
-  const [searchedOrder, setSearchedOrder] = useState<Order | null>(null);
-  const [hasSearched, setHasSearched] = useState(false);
+  const [shipment, setShipment] = useState<ShipmentData | null>(null);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const handleTrack = (e: React.FormEvent) => {
+  const handleTrack = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
-    setHasSearched(true);
+    setLoading(true);
+    setShipment(null);
 
-    const cleanOrderNum = orderNumber.trim().toUpperCase().replace(/^#/, "");
-    const found = getOrderByNumber(cleanOrderNum);
+    try {
+      const res = await fetch("/api/track-order", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          orderNumber,
+          contact: contactIdentifier,
+        }),
+      });
 
-    if (found) {
-      // Optional verification match against contact email or phone if provided
-      if (contactIdentifier.trim()) {
-        const queryContact = contactIdentifier.trim().toLowerCase();
-        const matchesEmail = found.shippingAddress.email.toLowerCase() === queryContact;
-        const matchesPhone = found.shippingAddress.phone.replace(/\D/g, "").includes(queryContact.replace(/\D/g, ""));
-
-        if (!matchesEmail && !matchesPhone) {
-          setError("Order found, but the provided email/phone does not match the delivery record. Please check details.");
-          setSearchedOrder(null);
-          return;
-        }
+      const data = await res.json();
+      if (!res.ok) {
+        setError(data.error || "No matching shipment found. Please verify your order number and contact details.");
+        setLoading(false);
+        return;
       }
-      setSearchedOrder(found);
-    } else {
-      setSearchedOrder(null);
-      setError(`No active shipment found matching Order #${cleanOrderNum}. Please verify your order confirmation message.`);
+
+      setShipment(data.shipment);
+      setLoading(false);
+    } catch {
+      setError("A network error occurred while looking up the shipment. Please try again.");
+      setLoading(false);
     }
   };
 
@@ -83,13 +106,14 @@ export default function TrackOrderPage() {
 
               <div>
                 <label className="text-xs font-bold uppercase tracking-wider text-[#12110E] block mb-1">
-                  Email or Phone (Verification)
+                  Email or Phone (Verification) *
                 </label>
                 <input
                   type="text"
                   placeholder="name@email.com or +91..."
                   value={contactIdentifier}
                   onChange={(e) => setContactIdentifier(e.target.value)}
+                  required
                   className="w-full px-4 py-3 bg-[#FAF8F5] border border-[#E4DFD5] text-xs font-medium focus:outline-none focus:border-black"
                 />
               </div>
@@ -97,10 +121,11 @@ export default function TrackOrderPage() {
 
             <button
               type="submit"
-              className="w-full py-4 bg-[#12110E] hover:bg-[#E85D2C] text-white font-display font-black text-xs uppercase tracking-wider transition-colors flex items-center justify-center gap-2 shadow-md"
+              disabled={loading}
+              className="w-full py-4 bg-[#12110E] hover:bg-[#E85D2C] text-white font-display font-black text-xs uppercase tracking-wider transition-colors flex items-center justify-center gap-2 shadow-md disabled:opacity-50"
             >
               <Search className="w-4 h-4" />
-              <span>Track Shipment Status</span>
+              <span>{loading ? "Searching Dispatch Records..." : "Track Shipment Status"}</span>
             </button>
           </form>
 
@@ -113,26 +138,26 @@ export default function TrackOrderPage() {
         </div>
 
         {/* Results Card */}
-        {searchedOrder && (
+        {shipment && (
           <div className="bg-white border border-[#E4DFD5] p-6 sm:p-8 space-y-6 shadow-sm animate-in fade-in duration-300">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-6 border-b border-[#E4DFD5]">
               <div>
                 <div className="flex items-center gap-3">
                   <h2 className="font-display font-black text-xl uppercase text-[#12110E]">
-                    Order #{searchedOrder.orderNumber}
+                    Order #{shipment.orderNumber}
                   </h2>
                   <span className="text-[10px] font-bold uppercase bg-[#E8F8F0] text-emerald-700 px-2.5 py-0.5">
-                    {searchedOrder.status}
+                    {shipment.status.replace("_", " ")}
                   </span>
                 </div>
                 <p className="text-xs text-[#8C877E] mt-0.5">
-                  Placed on {new Date(searchedOrder.createdAt).toLocaleDateString("en-IN", { dateStyle: "long" })}
+                  Courier: {shipment.carrier} • AWB: <span className="font-mono font-bold text-[#12110E]">{shipment.trackingNumber}</span>
                 </p>
               </div>
 
               <div className="text-left sm:text-right">
                 <span className="text-xs text-[#8C877E] block">Estimated Delivery</span>
-                <span className="font-mono font-bold text-xs text-[#12110E]">{searchedOrder.estimatedDelivery || "2-3 Business Days"}</span>
+                <span className="font-mono font-bold text-xs text-[#12110E]">{shipment.estimatedDelivery}</span>
               </div>
             </div>
 
@@ -142,26 +167,23 @@ export default function TrackOrderPage() {
                 Doorstep Tracking Timeline
               </h3>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
-                <div className="p-3 bg-[#FAF8F5] border border-emerald-600 text-emerald-700 space-y-1">
-                  <CheckCircle2 className="w-5 h-5 mx-auto" />
-                  <span className="text-xs font-bold uppercase block">1. Confirmed</span>
-                  <span className="text-[10px] text-[#6B665F] block font-mono">Verified</span>
-                </div>
-                <div className="p-3 bg-[#FAF8F5] border border-emerald-600 text-emerald-700 space-y-1">
-                  <CheckCircle2 className="w-5 h-5 mx-auto" />
-                  <span className="text-xs font-bold uppercase block">2. Packed</span>
-                  <span className="text-[10px] text-[#6B665F] block font-mono">Mumbai Hub</span>
-                </div>
-                <div className="p-3 bg-[#FAF8F5] border border-[#E85D2C] text-[#E85D2C] space-y-1">
-                  <Truck className="w-5 h-5 mx-auto animate-pulse" />
-                  <span className="text-xs font-bold uppercase block">3. In Transit</span>
-                  <span className="text-[10px] text-[#6B665F] block font-mono">Air Express</span>
-                </div>
-                <div className="p-3 bg-[#FAF8F5] border border-[#E4DFD5] text-[#8C877E] space-y-1">
-                  <Clock className="w-5 h-5 mx-auto" />
-                  <span className="text-xs font-bold uppercase block">4. Delivery</span>
-                  <span className="text-[10px] text-[#6B665F] block font-mono">Doorstep</span>
-                </div>
+                {shipment.timeline.map((step, idx) => (
+                  <div
+                    key={idx}
+                    className={`p-3 border space-y-1 ${
+                      step.completed
+                        ? "bg-[#FAF8F5] border-emerald-600 text-emerald-700"
+                        : "bg-[#FAF8F5] border-[#E4DFD5] text-[#8C877E]"
+                    }`}
+                  >
+                    {step.completed ? (
+                      <CheckCircle2 className="w-5 h-5 mx-auto" />
+                    ) : (
+                      <Clock className="w-5 h-5 mx-auto" />
+                    )}
+                    <span className="text-xs font-bold uppercase block">{step.status}</span>
+                  </div>
+                ))}
               </div>
             </div>
 
@@ -171,8 +193,8 @@ export default function TrackOrderPage() {
                 Items in this Shipment
               </h3>
               <div className="divide-y divide-[#F2EDE4] space-y-3">
-                {searchedOrder.items.map((item) => (
-                  <div key={item.id} className="pt-3 first:pt-0 flex items-center justify-between gap-4">
+                {shipment.items.map((item, idx) => (
+                  <div key={idx} className="pt-3 first:pt-0 flex items-center justify-between gap-4">
                     <div className="flex items-center gap-3">
                       <div className="relative w-12 h-14 bg-[#F2EDE4] border border-[#E4DFD5] shrink-0 overflow-hidden">
                         <Image src={item.image} alt={item.name} fill className="object-cover" />
@@ -186,21 +208,18 @@ export default function TrackOrderPage() {
                         </p>
                       </div>
                     </div>
-                    <span className="font-mono font-bold text-xs text-[#12110E]">
-                      {formatPrice(item.price * item.quantity)}
-                    </span>
                   </div>
                 ))}
               </div>
             </div>
 
-            {/* Delivery address */}
+            {/* Delivery Destination (Data Minimized: City, State, Country, Masked Pincode) */}
             <div className="pt-4 border-t border-[#E4DFD5] flex items-start gap-3 text-xs text-[#6B665F]">
               <MapPin className="w-4 h-4 text-[#E85D2C] shrink-0 mt-0.5" />
               <div>
-                <strong className="text-[#12110E] block uppercase font-bold">Delivery Address</strong>
+                <strong className="text-[#12110E] block uppercase font-bold">Delivery Region</strong>
                 <span>
-                  {searchedOrder.shippingAddress.firstName} {searchedOrder.shippingAddress.lastName} — {searchedOrder.shippingAddress.address}, {searchedOrder.shippingAddress.city}, {searchedOrder.shippingAddress.state} {searchedOrder.shippingAddress.pincode}
+                  {shipment.destination.city}, {shipment.destination.state}, {shipment.destination.country} ({shipment.destination.pincode})
                 </span>
               </div>
             </div>
