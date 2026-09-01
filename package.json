@@ -7,8 +7,12 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "typecheck": "tsc --noEmit",
     "test": "node scripts/test-security.mjs",
     "test:security": "node scripts/test-security.mjs"
+  },
+  "overrides": {
+    "postcss": "^8.5.23"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.1",
