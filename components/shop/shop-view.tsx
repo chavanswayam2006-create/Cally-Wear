@@ -1,17 +1,20 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
-import { SlidersHorizontal, X, RotateCcw, ChevronDown, Check } from "lucide-react";
+import { SlidersHorizontal, X, RotateCcw } from "lucide-react";
 import { Product, ProductCategory } from "@/lib/types/product";
 import { ProductGrid } from "@/components/product/product-grid";
-import { formatPrice } from "@/lib/utils";
 
 interface ShopViewProps {
   initialProducts: Product[];
   title?: string;
   subtitle?: string;
   defaultCategory?: ProductCategory | "all";
+  initialSale?: boolean;
+  initialSort?: "featured" | "price-asc" | "price-desc" | "newest" | "discount";
+  initialQuery?: string;
+  initialCategory?: string;
 }
 
 const subCategoriesList = [
@@ -45,11 +48,18 @@ export function ShopView({
   title = "All Footwear",
   subtitle = "Explore our complete rotation of streetwear sneakers, performance runners, and recovery slides.",
   defaultCategory = "all",
+  initialSale = false,
+  initialSort = "featured",
+  initialQuery = "",
+  initialCategory = "",
 }: ShopViewProps) {
   const searchParams = useSearchParams();
-  const queryParam = searchParams.get("q") || "";
-  const categoryParam = searchParams.get("category") || "";
-  const saleParam = searchParams.get("sale") === "true";
+
+  // Read params from searchParams or initial SSR props
+  const queryParam = searchParams?.get("q") || initialQuery || "";
+  const categoryParam = searchParams?.get("category") || initialCategory || "";
+  const saleParam = searchParams?.get("sale") === "true" || initialSale;
+  const sortParam = (searchParams?.get("sort") as any) || initialSort;
 
   // Filter States
   const [selectedGender, setSelectedGender] = useState<ProductCategory | "all">(defaultCategory);
@@ -61,8 +71,27 @@ export function ShopView({
   const [selectedPriceRange, setSelectedPriceRange] = useState<string | null>(null);
   const [inStockOnly, setInStockOnly] = useState(false);
   const [onlySale, setOnlySale] = useState(saleParam);
-  const [sortBy, setSortBy] = useState<"featured" | "price-asc" | "price-desc" | "newest" | "discount">("featured");
+  const [sortBy, setSortBy] = useState<"featured" | "price-asc" | "price-desc" | "newest" | "discount">(
+    ["featured", "price-asc", "price-desc", "newest", "discount"].includes(sortParam) ? sortParam : "featured"
+  );
   const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
+
+  // Sync state when searchParams change on client router navigation
+  useEffect(() => {
+    if (searchParams) {
+      const isSale = searchParams.get("sale") === "true";
+      const sort = searchParams.get("sort") as any;
+      const cat = searchParams.get("category");
+
+      setOnlySale(isSale);
+      if (sort && ["featured", "price-asc", "price-desc", "newest", "discount"].includes(sort)) {
+        setSortBy(sort);
+      }
+      if (cat) {
+        setSelectedSubCategories([cat]);
+      }
+    }
+  }, [searchParams]);
 
   // Filter and Sort Logic
   const filteredProducts = useMemo(() => {
@@ -135,8 +164,8 @@ export function ShopView({
         break;
       case "discount":
         list.sort((a, b) => {
-          const discA = a.compareAtPrice ? ((a.compareAtPrice - a.price) / a.compareAtPrice) : 0;
-          const discB = b.compareAtPrice ? ((b.compareAtPrice - b.price) / b.compareAtPrice) : 0;
+          const discA = a.compareAtPrice ? (a.compareAtPrice - a.price) / a.compareAtPrice : 0;
+          const discB = b.compareAtPrice ? (b.compareAtPrice - b.price) / b.compareAtPrice : 0;
           return discB - discA;
         });
         break;
@@ -206,10 +235,12 @@ export function ShopView({
           CALLY WEAR CATALOG
         </span>
         <h1 className="font-display font-black text-3xl sm:text-4xl md:text-5xl uppercase tracking-tight text-[#12110E]">
-          {title}
+          {onlySale ? "Archive Sale & Markdown Drops" : title}
         </h1>
         <p className="text-xs sm:text-sm text-[#6B665F] max-w-2xl mt-2 leading-relaxed">
-          {subtitle}
+          {onlySale
+            ? "Exclusive archive markdowns, seasonal colorway clearances, and final rotation pairs."
+            : subtitle}
         </p>
       </div>
 
@@ -481,109 +512,15 @@ export function ShopView({
         <div className="lg:col-span-9">
           <ProductGrid
             products={filteredProducts}
-            emptyMessage="No sneaker silhouettes match the selected filters. Try clearing some criteria."
+            emptyMessage={
+              onlySale
+                ? "No archive sale markdowns currently available. Explore full-price drops or new arrivals."
+                : "No sneaker silhouettes match the selected filters. Try clearing some criteria."
+            }
             onResetFilters={resetAllFilters}
           />
         </div>
       </div>
-
-      {/* Mobile Filter Sheet / Drawer */}
-      {isMobileFilterOpen && (
-        <div className="fixed inset-0 z-50 flex lg:hidden">
-          <div
-            className="fixed inset-0 bg-black/75 backdrop-blur-sm"
-            onClick={() => setIsMobileFilterOpen(false)}
-          />
-          <div className="relative w-full max-w-sm bg-[#FAF8F5] text-[#12110E] h-full flex flex-col z-10 shadow-2xl overflow-y-auto animate-in slide-in-from-left duration-300">
-            <div className="p-4 border-b border-[#E4DFD5] bg-white flex items-center justify-between">
-              <h3 className="font-display font-black text-lg uppercase text-[#12110E]">
-                Filter Catalog
-              </h3>
-              <button
-                onClick={() => setIsMobileFilterOpen(false)}
-                className="p-1.5 text-[#12110E] hover:text-[#E85D2C]"
-              >
-                <X className="w-6 h-6" />
-              </button>
-            </div>
-
-            <div className="p-5 flex-1 overflow-y-auto space-y-6">
-              {/* Category */}
-              <div>
-                <h4 className="text-xs font-black uppercase text-[#12110E] mb-2">Category</h4>
-                <div className="space-y-2 text-xs">
-                  {subCategoriesList.map((sub) => (
-                    <label key={sub.id} className="flex items-center gap-2 text-sm">
-                      <input
-                        type="checkbox"
-                        checked={selectedSubCategories.includes(sub.id)}
-                        onChange={() => toggleSubCategory(sub.id)}
-                        className="accent-[#E85D2C]"
-                      />
-                      <span>{sub.label}</span>
-                    </label>
-                  ))}
-                </div>
-              </div>
-
-              {/* Sizes */}
-              <div>
-                <h4 className="text-xs font-black uppercase text-[#12110E] mb-2">Size (UK)</h4>
-                <div className="grid grid-cols-3 gap-2">
-                  {allSizes.map((size) => (
-                    <button
-                      key={size}
-                      onClick={() => toggleSize(size)}
-                      className={`py-2 text-xs font-mono font-bold uppercase border ${
-                        selectedSizes.includes(size)
-                          ? "bg-[#12110E] text-white border-[#E85D2C]"
-                          : "bg-white text-black border-[#E4DFD5]"
-                      }`}
-                    >
-                      {size}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* Price */}
-              <div>
-                <h4 className="text-xs font-black uppercase text-[#12110E] mb-2">Price Range</h4>
-                <div className="space-y-2 text-xs">
-                  {priceRanges.map((range) => (
-                    <label key={range.id} className="flex items-center gap-2 text-sm">
-                      <input
-                        type="radio"
-                        name="mob-price"
-                        checked={selectedPriceRange === range.id}
-                        onChange={() => setSelectedPriceRange(range.id)}
-                        className="accent-[#E85D2C]"
-                      />
-                      <span>{range.label}</span>
-                    </label>
-                  ))}
-                </div>
-              </div>
-            </div>
-
-            {/* Drawer Footer Actions */}
-            <div className="p-4 bg-white border-t border-[#E4DFD5] flex gap-3">
-              <button
-                onClick={resetAllFilters}
-                className="flex-1 py-3 border border-[#E4DFD5] text-xs font-bold uppercase hover:border-black"
-              >
-                Reset
-              </button>
-              <button
-                onClick={() => setIsMobileFilterOpen(false)}
-                className="flex-1 py-3 bg-[#E85D2C] text-white text-xs font-black uppercase tracking-wider"
-              >
-                Show ({filteredProducts.length})
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 }

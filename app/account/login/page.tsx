@@ -3,22 +3,31 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Lock, Mail, ArrowRight, Sparkles } from "lucide-react";
+import { Lock, Mail, ArrowRight } from "lucide-react";
 import { Logo } from "@/components/logo";
+import { useAuthStore } from "@/lib/store/auth-store";
 
 export default function LoginPage() {
   const router = useRouter();
-  const [email, setEmail] = useState("alex.streets@gmail.com");
-  const [password, setPassword] = useState("••••••••••••");
+  const { login } = useAuthStore();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
+    if (!email || !password) {
+      setError("Please enter both email and password.");
+      return;
+    }
     setLoading(true);
+    setError("");
     setTimeout(() => {
+      login(email);
       setLoading(false);
       router.push("/account");
-    }, 800);
+    }, 500);
   };
 
   return (
@@ -35,6 +44,12 @@ export default function LoginPage() {
           </p>
         </div>
 
+        {error && (
+          <div className="p-3 bg-rose-50 border border-rose-200 text-rose-700 text-xs font-medium">
+            {error}
+          </div>
+        )}
+
         <form onSubmit={handleLogin} className="space-y-4">
           <div>
             <label className="text-xs font-bold uppercase tracking-wider text-[#12110E] block mb-1">
@@ -44,6 +59,7 @@ export default function LoginPage() {
               <Mail className="w-4 h-4 text-[#8C877E] absolute left-3.5 top-1/2 -translate-y-1/2" />
               <input
                 type="email"
+                placeholder="you@example.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
@@ -65,6 +81,7 @@ export default function LoginPage() {
               <Lock className="w-4 h-4 text-[#8C877E] absolute left-3.5 top-1/2 -translate-y-1/2" />
               <input
                 type="password"
+                placeholder="Enter password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
@@ -76,7 +93,7 @@ export default function LoginPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-4 bg-[#12110E] hover:bg-[#E85D2C] text-white font-display font-black text-xs uppercase tracking-wider transition-colors flex items-center justify-center gap-2 shadow-md"
+            className="w-full py-4 bg-[#12110E] hover:bg-[#E85D2C] text-white font-display font-black text-xs uppercase tracking-wider transition-colors flex items-center justify-center gap-2 shadow-md disabled:opacity-50"
           >
             <span>{loading ? "Signing In..." : "Sign In to Account"}</span>
             <ArrowRight className="w-4 h-4" />
@@ -87,6 +104,12 @@ export default function LoginPage() {
           <span>New to Cally Wear? </span>
           <Link href="/account/register" className="font-bold text-[#E85D2C] hover:underline">
             Create an Account
+          </Link>
+        </div>
+
+        <div className="text-center text-xs text-[#8C877E]">
+          <Link href="/track-order" className="hover:text-black underline">
+            Track an order as a guest without signing in →
           </Link>
         </div>
       </div>

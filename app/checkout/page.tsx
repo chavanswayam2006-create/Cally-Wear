@@ -126,7 +126,7 @@ export default function CheckoutPage() {
             : "Net Banking",
         paymentStatus: paymentMethod === "cod" ? "pending" : "paid",
         trackingNumber: `EXP-IN-${Math.floor(100000000 + Math.random() * 900000000)}`,
-        estimatedDelivery: "3 business days",
+        estimatedDelivery: "2–5 business days (metro cities 2–3, rest of India 3–5)",
       };
 
       addOrder(newOrder);
@@ -406,7 +406,7 @@ export default function CheckoutPage() {
                           Standard Express Courier
                         </span>
                         <span className="text-xs text-[#6B665F]">
-                          Dispatched in 24h. Delivered in 2–4 business days.
+                          Dispatched within 24h. Metro cities: 2–3 business days. Rest of India: 3–5 business days.
                         </span>
                       </div>
                     </div>

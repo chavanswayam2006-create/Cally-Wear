@@ -768,6 +768,16 @@ export function getNewArrivals(): Product[] {
   return products.filter((p) => p.isNew || p.tags?.includes("Drop 04"));
 }
 
+export function getBestSellers(): Product[] {
+  // Select high-rotation street classics, platforms, and slides EXCLUDING fresh Drop 04 / New Arrivals
+  // to ensure "New Arrivals" and "Trending Now" homepage rails show distinct merchandise (CW-017)
+  return products.filter((p) => {
+    const isNewArrival = p.isNew || p.tags?.includes("Drop 04");
+    const isBestSeller = p.isFeatured || p.tags?.includes("Icon") || p.tags?.includes("Essential");
+    return isBestSeller && !isNewArrival;
+  });
+}
+
 export function getRelatedProducts(currentProductId: string, limit: number = 4): Product[] {
   const current = products.find((p) => p.id === currentProductId);
   if (!current) return products.slice(0, limit);

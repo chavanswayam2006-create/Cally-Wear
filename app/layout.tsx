@@ -19,6 +19,10 @@ const plusJakartaSans = Plus_Jakarta_Sans({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://callywear.com"),
+  alternates: {
+    canonical: "/",
+  },
   title: {
     template: "%s | Cally Wear Footwear",
     default: "Cally Wear — Direct-to-Consumer Footwear & Streetwear",

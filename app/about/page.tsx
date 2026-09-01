@@ -95,12 +95,15 @@ export default function AboutPage() {
               Shop No. 9, Sadguru Darshan, Liberty Garden, Road No. 3, Malad West, Mumbai
             </p>
           </div>
-          <Link
-            href="/contact"
-            className="px-6 py-3.5 bg-[#E85D2C] hover:bg-[#D44E1F] text-white font-display font-black text-xs uppercase tracking-wider transition-colors shrink-0 text-center"
+          <a
+            href="https://maps.google.com/?q=Liberty+Garden+Road+No+3+Malad+West+Mumbai+400064"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="px-6 py-3.5 bg-[#E85D2C] hover:bg-[#D44E1F] text-white font-display font-black text-xs uppercase tracking-wider transition-colors shrink-0 text-center inline-flex items-center justify-center gap-2"
           >
-            Get Directions & Hours
-          </Link>
+            <span>Get Directions on Google Maps</span>
+            <ArrowRight className="w-4 h-4" />
+          </a>
         </div>
       </div>
     </div>

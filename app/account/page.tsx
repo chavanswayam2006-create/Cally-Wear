@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import {
@@ -13,16 +13,85 @@ import {
   ExternalLink,
   Truck,
   Sparkles,
-  ChevronRight
+  Lock,
+  ArrowRight,
+  Plus
 } from "lucide-react";
+import { useAuthStore } from "@/lib/store/auth-store";
 import { useOrderStore } from "@/lib/store/order-store";
 import { useWishlistStore } from "@/lib/store/wishlist-store";
 import { formatPrice } from "@/lib/utils";
 
 export default function AccountPage() {
+  const [mounted, setMounted] = useState(false);
+  const { user, isAuthenticated, logout } = useAuthStore();
   const { orders } = useOrderStore();
   const { items: wishlistItems } = useWishlistStore();
   const [activeTab, setActiveTab] = useState<"orders" | "addresses" | "wishlist">("orders");
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // Server-side & initial client render: secure logged-out state (Zero PII leak)
+  if (!mounted || !isAuthenticated || !user) {
+    return (
+      <div className="min-h-[75vh] bg-[#FAF8F5] flex items-center justify-center p-4 py-16">
+        <div className="w-full max-w-md bg-white border border-[#E4DFD5] p-8 text-center space-y-6 shadow-sm">
+          <div className="w-16 h-16 bg-[#12110E] text-[#E85D2C] flex items-center justify-center mx-auto">
+            <Lock className="w-8 h-8" />
+          </div>
+
+          <div className="space-y-2">
+            <span className="text-xs font-black uppercase tracking-widest text-[#E85D2C] block">
+              MEMBER PORTAL
+            </span>
+            <h1 className="font-display font-black text-2xl sm:text-3xl uppercase tracking-tight text-[#12110E]">
+              Account Sign In Required
+            </h1>
+            <p className="text-xs text-[#6B665F] leading-relaxed max-w-xs mx-auto">
+              Please sign in to your Cally Wear member account to view your past orders, saved addresses, and VIP drop access.
+            </p>
+          </div>
+
+          <div className="space-y-3 pt-2">
+            <Link
+              href="/account/login"
+              className="w-full py-3.5 bg-[#12110E] hover:bg-[#E85D2C] text-white font-display font-black text-xs uppercase tracking-wider transition-colors flex items-center justify-center gap-2 shadow-md"
+            >
+              <span>Sign In to Account</span>
+              <ArrowRight className="w-4 h-4" />
+            </Link>
+
+            <Link
+              href="/account/register"
+              className="w-full py-3.5 bg-white border border-[#12110E] hover:bg-[#FAF8F5] text-[#12110E] font-display font-black text-xs uppercase tracking-wider transition-colors flex items-center justify-center gap-2"
+            >
+              <span>Create VIP Account</span>
+            </Link>
+          </div>
+
+          <div className="pt-6 border-t border-[#E4DFD5] text-xs text-[#6B665F] space-y-1">
+            <p className="font-medium text-[#12110E]">Need to track an order as a guest?</p>
+            <Link href="/track-order" className="text-[#E85D2C] font-bold hover:underline inline-flex items-center gap-1">
+              <Truck className="w-3.5 h-3.5" />
+              <span>Track with Order Number & Phone</span>
+            </Link>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Authenticated Member View
+  const initials = user.name
+    ? user.name
+        .split(" ")
+        .map((n) => n[0])
+        .join("")
+        .toUpperCase()
+        .slice(0, 2)
+    : "CW";
 
   return (
     <div className="min-h-screen bg-[#FAF8F5] py-8 md:py-12">
@@ -31,29 +100,33 @@ export default function AccountPage() {
         <div className="bg-white border border-[#E4DFD5] p-6 sm:p-8 flex flex-col sm:flex-row sm:items-center justify-between gap-6">
           <div className="flex items-center gap-4">
             <div className="w-16 h-16 bg-[#12110E] text-white font-display font-black text-2xl flex items-center justify-center">
-              AK
+              {initials}
             </div>
             <div>
               <div className="flex items-center gap-2">
                 <h1 className="font-display font-black text-2xl uppercase tracking-tight text-[#12110E]">
-                  Alex Kapoor
+                  {user.name}
                 </h1>
-                <span className="text-[10px] bg-[#E85D2C] text-white px-2 py-0.5 font-bold uppercase tracking-wider">
-                  VIP MEMBER
-                </span>
+                {user.isVip && (
+                  <span className="text-[10px] bg-[#E85D2C] text-white px-2 py-0.5 font-bold uppercase tracking-wider">
+                    VIP MEMBER
+                  </span>
+                )}
               </div>
-              <p className="text-xs text-[#6B665F]">alex.streets@gmail.com • +91 98765 43210</p>
+              <p className="text-xs text-[#6B665F]">
+                {user.email} {user.phone ? `• ${user.phone}` : ""}
+              </p>
             </div>
           </div>
 
           <div className="flex items-center gap-3">
-            <Link
-              href="/account/login"
+            <button
+              onClick={() => logout()}
               className="px-4 py-2 border border-[#E4DFD5] text-xs font-bold uppercase text-[#8C877E] hover:border-black hover:text-black transition-colors flex items-center gap-1.5"
             >
               <LogOut className="w-3.5 h-3.5" />
               <span>Sign Out</span>
-            </Link>
+            </button>
           </div>
         </div>
 
@@ -106,13 +179,13 @@ export default function AccountPage() {
                     No Orders Placed Yet
                   </h3>
                   <p className="text-xs text-[#6B665F] max-w-sm mx-auto">
-                    When you purchase kicks from our drops, your order status and doorstep tracking will show here.
+                    When you purchase kicks from our drops, your order status and doorstep tracking will appear here.
                   </p>
                   <Link
                     href="/shop"
                     className="inline-flex items-center gap-2 px-6 py-3 bg-[#12110E] text-white text-xs font-black uppercase tracking-wider hover:bg-[#E85D2C] transition-colors"
                   >
-                    <span>Browse Drops</span>
+                    <span>Browse Catalog</span>
                   </Link>
                 </div>
               ) : (
@@ -169,7 +242,7 @@ export default function AccountPage() {
                     <div className="pt-4 border-t border-[#E4DFD5] flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
                       <div className="flex items-center gap-2 text-[#6B665F]">
                         <Truck className="w-4 h-4 text-[#E85D2C]" />
-                        <span>Tracking: <strong className="text-[#12110E] font-mono">{order.trackingNumber}</strong></span>
+                        <span>Tracking: <strong className="text-[#12110E] font-mono">{order.trackingNumber || `TRK-${order.orderNumber}`}</strong></span>
                       </div>
 
                       <Link
@@ -188,23 +261,38 @@ export default function AccountPage() {
 
           {/* ADDRESSES TAB */}
           {activeTab === "addresses" && (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="bg-white border border-[#12110E] p-6 space-y-3 relative">
-                <span className="absolute top-4 right-4 text-[10px] bg-[#12110E] text-white px-2 py-0.5 font-bold uppercase">
-                  DEFAULT
-                </span>
-                <h3 className="font-display font-black text-sm uppercase text-[#12110E]">
-                  Alex Kapoor
-                </h3>
-                <div className="text-xs text-[#6B665F] space-y-1">
-                  <p>Flat 402, High Street Towers, Linking Road, Tower B</p>
-                  <p>Mumbai, Maharashtra — 400050</p>
-                  <p>Phone: +91 98765 43210</p>
+            <div className="space-y-4">
+              {user.addresses && user.addresses.length > 0 ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {user.addresses.map((addr) => (
+                    <div key={addr.id} className="bg-white border border-[#12110E] p-6 space-y-3 relative">
+                      {addr.isDefault && (
+                        <span className="absolute top-4 right-4 text-[10px] bg-[#12110E] text-white px-2 py-0.5 font-bold uppercase">
+                          DEFAULT
+                        </span>
+                      )}
+                      <h3 className="font-display font-black text-sm uppercase text-[#12110E]">
+                        {addr.name}
+                      </h3>
+                      <div className="text-xs text-[#6B665F] space-y-1">
+                        <p>{addr.street}</p>
+                        <p>{addr.city}, {addr.state} — {addr.pincode}</p>
+                        <p>Phone: {addr.phone}</p>
+                      </div>
+                    </div>
+                  ))}
                 </div>
-                <div className="pt-3 border-t border-[#E4DFD5] flex gap-3 text-xs font-bold uppercase">
-                  <button className="text-[#E85D2C] hover:underline">Edit Address</button>
+              ) : (
+                <div className="p-12 bg-white border border-[#E4DFD5] text-center space-y-3">
+                  <MapPin className="w-12 h-12 text-[#8C877E] mx-auto" />
+                  <h3 className="font-display font-black text-base uppercase text-[#12110E]">
+                    No Saved Addresses
+                  </h3>
+                  <p className="text-xs text-[#6B665F] max-w-sm mx-auto">
+                    Addresses entered during checkout will automatically be saved to your profile for faster checkout.
+                  </p>
                 </div>
-              </div>
+              )}
             </div>
           )}
 

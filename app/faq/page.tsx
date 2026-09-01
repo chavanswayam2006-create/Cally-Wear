@@ -23,7 +23,7 @@ const faqCategories = [
     questions: [
       {
         q: "What are the shipping charges and delivery timeframes?",
-        a: "We offer FREE Express Courier delivery across India on all orders exceeding ₹1,999. Orders below ₹1,999 incur a flat ₹199 delivery charge. Orders are packaged and dispatched within 24 hours from our Mumbai hub and arrive within 2–4 business days.",
+        a: "We offer FREE Express Courier delivery across India on all orders exceeding ₹1,999. Orders below ₹1,999 incur a flat ₹199 delivery charge. Orders are packaged and dispatched within 24 hours from our Mumbai fulfillment hub. Metro cities (Mumbai, Delhi NCR, Bengaluru, Hyderabad, Chennai, Kolkata, Pune) are delivered within 2–3 business days. Rest of India arrives within 3–5 business days.",
       },
       {
         q: "Is Cash on Delivery (COD) available?",

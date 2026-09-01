@@ -6,10 +6,11 @@ import { TrendingSection } from "@/components/home/trending-section";
 import { EditorialBlocks } from "@/components/home/editorial-blocks";
 import { InstagramStrip } from "@/components/home/instagram-strip";
 import { NewsletterBand } from "@/components/home/newsletter-band";
-import { products, getNewArrivals } from "@/lib/data/products";
+import { getNewArrivals, getBestSellers } from "@/lib/data/products";
 
 export default function HomePage() {
   const newArrivals = getNewArrivals();
+  const bestSellers = getBestSellers();
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -22,8 +23,8 @@ export default function HomePage() {
       {/* 3. Shop By Category Tiles */}
       <CategoryTiles />
 
-      {/* 4. Trending Now Tabbed Grid */}
-      <TrendingSection products={products} />
+      {/* 4. Trending Now Tabbed Grid (Best Sellers & Street Heat) */}
+      <TrendingSection products={bestSellers} />
 
       {/* 5. Highsnobiety / END. Editorial Storytelling */}
       <EditorialBlocks />

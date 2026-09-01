@@ -80,16 +80,19 @@ export function ProductInfo({ product, selectedColor, onColorChange }: ProductIn
           {product.name}
         </h1>
 
-        {/* Rating and Reviews */}
-        <div className="flex items-center gap-3 mt-3 text-xs font-semibold text-[#6B665F]">
-          <div className="flex items-center gap-1 bg-[#181714] text-white px-2 py-0.5 text-[11px] font-mono">
-            <span>★</span>
-            <span>{product.rating || 4.9}</span>
-          </div>
-          <span>({product.reviewCount || 34} verified reviews)</span>
+        {/* Product Craft & Batch Status */}
+        <div className="flex items-center gap-2 mt-3 text-xs font-semibold text-[#6B665F]">
+          <span className="inline-flex items-center gap-1 bg-[#181714] text-white px-2.5 py-0.5 text-[10px] font-black uppercase tracking-wider">
+            <Sparkles className="w-3 h-3 text-[#E85D2C]" />
+            <span>Drop 04 Batch</span>
+          </span>
+          <span>•</span>
+          <span className="text-[#12110E] font-bold uppercase tracking-wider text-[11px]">
+            Original Silhouette
+          </span>
           <span>•</span>
           <span className="text-emerald-700 font-bold uppercase tracking-wider text-[11px]">
-            100% Authentic
+            Ready to Ship
           </span>
         </div>
       </div>
@@ -265,8 +268,12 @@ export function ProductInfo({ product, selectedColor, onColorChange }: ProductIn
         {/* Accordion 1: Description */}
         <div>
           <button
+            type="button"
+            id="accordion-btn-description"
+            aria-expanded={openAccordion === "description"}
+            aria-controls="accordion-panel-description"
             onClick={() => toggleAccordion("description")}
-            className="w-full py-4 flex items-center justify-between font-display font-black text-sm uppercase text-[#12110E] text-left"
+            className="w-full py-4 flex items-center justify-between font-display font-black text-sm uppercase text-[#12110E] text-left hover:text-[#E85D2C] transition-colors focus-visible:outline-2 focus-visible:outline-[#E85D2C]"
           >
             <span>Product Story & Silhouette</span>
             <ChevronDown
@@ -275,25 +282,33 @@ export function ProductInfo({ product, selectedColor, onColorChange }: ProductIn
               }`}
             />
           </button>
-          {openAccordion === "description" && (
-            <div className="pb-4 text-xs text-[#6B665F] leading-relaxed space-y-2">
-              <p>{product.description}</p>
-              {product.details && (
-                <ul className="list-disc list-inside space-y-1 pt-1 text-[#12110E] font-medium">
-                  {product.details.map((d, i) => (
-                    <li key={i}>{d}</li>
-                  ))}
-                </ul>
-              )}
-            </div>
-          )}
+          <div
+            id="accordion-panel-description"
+            role="region"
+            aria-labelledby="accordion-btn-description"
+            hidden={openAccordion !== "description"}
+            className="pb-4 text-xs text-[#6B665F] leading-relaxed space-y-2"
+          >
+            <p>{product.description}</p>
+            {product.details && (
+              <ul className="list-disc list-inside space-y-1 pt-1 text-[#12110E] font-medium">
+                {product.details.map((d, i) => (
+                  <li key={i}>{d}</li>
+                ))}
+              </ul>
+            )}
+          </div>
         </div>
 
         {/* Accordion 2: Materials & Care */}
         <div>
           <button
+            type="button"
+            id="accordion-btn-materials"
+            aria-expanded={openAccordion === "materials"}
+            aria-controls="accordion-panel-materials"
             onClick={() => toggleAccordion("materials")}
-            className="w-full py-4 flex items-center justify-between font-display font-black text-sm uppercase text-[#12110E] text-left"
+            className="w-full py-4 flex items-center justify-between font-display font-black text-sm uppercase text-[#12110E] text-left hover:text-[#E85D2C] transition-colors focus-visible:outline-2 focus-visible:outline-[#E85D2C]"
           >
             <span>Materials & Care</span>
             <ChevronDown
@@ -302,23 +317,31 @@ export function ProductInfo({ product, selectedColor, onColorChange }: ProductIn
               }`}
             />
           </button>
-          {openAccordion === "materials" && (
-            <div className="pb-4 text-xs text-[#6B665F] leading-relaxed space-y-2">
-              <p>
-                <strong className="text-[#12110E]">Composition:</strong> {product.materials || "Premium high-grade synthetic leather, rubber cupsole, EVA foam."}
-              </p>
-              <p>
-                <strong className="text-[#12110E]">Care Guide:</strong> Wipe clean with a soft damp micro-fiber cloth. Avoid submerged soaking or direct artificial heat drying. Store in a cool dry space with shoe trees or tissue padding to preserve form.
-              </p>
-            </div>
-          )}
+          <div
+            id="accordion-panel-materials"
+            role="region"
+            aria-labelledby="accordion-btn-materials"
+            hidden={openAccordion !== "materials"}
+            className="pb-4 text-xs text-[#6B665F] leading-relaxed space-y-2"
+          >
+            <p>
+              <strong className="text-[#12110E]">Composition:</strong> {product.materials || "Premium high-grade synthetic leather, rubber cupsole, EVA foam."}
+            </p>
+            <p>
+              <strong className="text-[#12110E]">Care Guide:</strong> Wipe clean with a soft damp micro-fiber cloth. Avoid submerged soaking or direct artificial heat drying. Store in a cool dry space with shoe trees or tissue padding to preserve form.
+            </p>
+          </div>
         </div>
 
         {/* Accordion 3: Shipping & Returns */}
         <div>
           <button
+            type="button"
+            id="accordion-btn-shipping"
+            aria-expanded={openAccordion === "shipping"}
+            aria-controls="accordion-panel-shipping"
             onClick={() => toggleAccordion("shipping")}
-            className="w-full py-4 flex items-center justify-between font-display font-black text-sm uppercase text-[#12110E] text-left"
+            className="w-full py-4 flex items-center justify-between font-display font-black text-sm uppercase text-[#12110E] text-left hover:text-[#E85D2C] transition-colors focus-visible:outline-2 focus-visible:outline-[#E85D2C]"
           >
             <span>Shipping & 7-Day Doorstep Returns</span>
             <ChevronDown
@@ -327,19 +350,23 @@ export function ProductInfo({ product, selectedColor, onColorChange }: ProductIn
               }`}
             />
           </button>
-          {openAccordion === "shipping" && (
-            <div className="pb-4 text-xs text-[#6B665F] leading-relaxed space-y-2">
-              <p>
-                • <strong>Standard Express Dispatch:</strong> Orders are packaged and dispatched within 24 hours from our Mumbai fulfillment hub. Delivered in 2-4 business days across metro cities.
-              </p>
-              <p>
-                • <strong>Doorstep Size Exchange:</strong> Ordered the wrong size? We provide free hassle-free pickup and replacement within 7 calendar days from delivery date.
-              </p>
-              <p>
-                • <strong>Cash on Delivery:</strong> Available across 18,000+ PIN codes in India.
-              </p>
-            </div>
-          )}
+          <div
+            id="accordion-panel-shipping"
+            role="region"
+            aria-labelledby="accordion-btn-shipping"
+            hidden={openAccordion !== "shipping"}
+            className="pb-4 text-xs text-[#6B665F] leading-relaxed space-y-2"
+          >
+            <p>
+              • <strong>Transit Timelines:</strong> Orders are dispatched within 24 hours from our Mumbai fulfillment hub. Metro cities (Mumbai, Delhi NCR, Bengaluru, Hyderabad, Chennai, Kolkata, Pune) are delivered within 2–3 business days. Rest of India arrives within 3–5 business days.
+            </p>
+            <p>
+              • <strong>Doorstep Size Exchange:</strong> Ordered the wrong size? We provide free hassle-free pickup and replacement within 7 calendar days from delivery date.
+            </p>
+            <p>
+              • <strong>Cash on Delivery:</strong> Available across 18,000+ PIN codes in India.
+            </p>
+          </div>
         </div>
       </div>
 

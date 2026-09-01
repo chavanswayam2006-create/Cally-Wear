@@ -9,38 +9,38 @@ const igPosts = [
   {
     id: 1,
     image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=600&q=80",
-    likes: "1.4k",
     tag: "#ApexTechRunner",
+    url: "https://www.instagram.com/cally_wear",
   },
   {
     id: 2,
     image: "https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?auto=format&fit=crop&w=600&q=80",
-    likes: "980",
     tag: "#StrataPlatform",
+    url: "https://www.instagram.com/cally_wear",
   },
   {
     id: 3,
     image: "https://images.unsplash.com/photo-1525966222134-fcfa99b8ae77?auto=format&fit=crop&w=600&q=80",
-    likes: "2.1k",
     tag: "#StreetClassics",
+    url: "https://www.instagram.com/cally_wear",
   },
   {
     id: 4,
     image: "https://images.unsplash.com/photo-1551107696-a4b0c5a0d9a2?auto=format&fit=crop&w=600&q=80",
-    likes: "1.8k",
     tag: "#NomadTactical",
+    url: "https://www.instagram.com/cally_wear",
   },
   {
     id: 5,
     image: "https://images.unsplash.com/photo-1608231387042-66d1773070a5?auto=format&fit=crop&w=600&q=80",
-    likes: "1.2k",
     tag: "#MonochromeVault",
+    url: "https://www.instagram.com/cally_wear",
   },
   {
     id: 6,
     image: "https://images.unsplash.com/photo-1560769629-975ec94e6a86?auto=format&fit=crop&w=600&q=80",
-    likes: "3.4k",
     tag: "#AuraCourt",
+    url: "https://www.instagram.com/cally_wear",
   },
 ];
 
@@ -76,7 +76,7 @@ export function InstagramStrip() {
           {igPosts.map((post) => (
             <a
               key={post.id}
-              href="https://www.instagram.com/cally_wear"
+              href={post.url}
               target="_blank"
               rel="noopener noreferrer"
               className="group relative aspect-square bg-[#12110E] overflow-hidden border border-[#E4DFD5] hover:border-black transition-colors"
@@ -95,8 +95,8 @@ export function InstagramStrip() {
                 <span className="text-[10px] font-black uppercase tracking-wider text-[#FAF8F5]">
                   {post.tag}
                 </span>
-                <span className="text-[9px] text-[#99948D] mt-1 font-mono">
-                  ♥ {post.likes}
+                <span className="text-[9px] text-[#D4CFC7] mt-1 font-mono uppercase tracking-wider">
+                  View On Instagram ↗
                 </span>
               </div>
             </a>

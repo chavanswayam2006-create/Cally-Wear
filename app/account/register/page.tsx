@@ -5,22 +5,31 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Lock, Mail, User, Phone, ArrowRight } from "lucide-react";
 import { Logo } from "@/components/logo";
+import { useAuthStore } from "@/lib/store/auth-store";
 
 export default function RegisterPage() {
   const router = useRouter();
+  const { register: authRegister } = useAuthStore();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const handleRegister = (e: React.FormEvent) => {
     e.preventDefault();
+    if (!name || !email || !password) {
+      setError("Please fill in all required fields.");
+      return;
+    }
     setLoading(true);
+    setError("");
     setTimeout(() => {
+      authRegister(name, email, phone);
       setLoading(false);
       router.push("/account");
-    }, 800);
+    }, 500);
   };
 
   return (
@@ -37,6 +46,12 @@ export default function RegisterPage() {
           </p>
         </div>
 
+        {error && (
+          <div className="p-3 bg-rose-50 border border-rose-200 text-rose-700 text-xs font-medium">
+            {error}
+          </div>
+        )}
+
         <form onSubmit={handleRegister} className="space-y-4">
           <div>
             <label className="text-xs font-bold uppercase tracking-wider text-[#12110E] block mb-1">
@@ -46,7 +61,7 @@ export default function RegisterPage() {
               <User className="w-4 h-4 text-[#8C877E] absolute left-3.5 top-1/2 -translate-y-1/2" />
               <input
                 type="text"
-                placeholder="Rohan Sharma"
+                placeholder="Your Name"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 required
@@ -63,7 +78,7 @@ export default function RegisterPage() {
               <Mail className="w-4 h-4 text-[#8C877E] absolute left-3.5 top-1/2 -translate-y-1/2" />
               <input
                 type="email"
-                placeholder="rohan@example.com"
+                placeholder="you@example.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
@@ -74,7 +89,7 @@ export default function RegisterPage() {
 
           <div>
             <label className="text-xs font-bold uppercase tracking-wider text-[#12110E] block mb-1">
-              Mobile Number
+              Mobile Number (Optional)
             </label>
             <div className="relative">
               <Phone className="w-4 h-4 text-[#8C877E] absolute left-3.5 top-1/2 -translate-y-1/2" />
@@ -83,7 +98,6 @@ export default function RegisterPage() {
                 placeholder="+91 98765 43210"
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
-                required
                 className="w-full pl-10 pr-4 py-3 bg-[#FAF8F5] border border-[#E4DFD5] text-xs font-medium focus:outline-none focus:border-black font-mono"
               />
             </div>
@@ -101,6 +115,7 @@ export default function RegisterPage() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
+                minLength={8}
                 className="w-full pl-10 pr-4 py-3 bg-[#FAF8F5] border border-[#E4DFD5] text-xs font-medium focus:outline-none focus:border-black"
               />
             </div>
@@ -109,7 +124,7 @@ export default function RegisterPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-4 bg-[#E85D2C] hover:bg-[#D44E1F] text-white font-display font-black text-xs uppercase tracking-wider transition-colors flex items-center justify-center gap-2 shadow-md"
+            className="w-full py-4 bg-[#E85D2C] hover:bg-[#D44E1F] text-white font-display font-black text-xs uppercase tracking-wider transition-colors flex items-center justify-center gap-2 shadow-md disabled:opacity-50"
           >
             <span>{loading ? "Creating Account..." : "Create Account"}</span>
             <ArrowRight className="w-4 h-4" />

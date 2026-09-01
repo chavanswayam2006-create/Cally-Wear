@@ -41,7 +41,7 @@ export default function ShippingReturnsPage() {
                 • <strong>Dispatch Schedule:</strong> Orders confirmed before 3:00 PM IST are inspected and dispatched from our Mumbai hub on the same business day.
               </p>
               <p>
-                • <strong>Transit Timelines:</strong> Metro cities (Mumbai, Delhi NCR, Bangalore, Hyderabad, Chennai, Kolkata, Pune) are delivered within 2–3 business days. Non-metro regions arrive within 3–5 business days.
+                • <strong>Transit Timelines:</strong> Orders are dispatched within 24 hours from our Mumbai fulfillment hub. Metro cities (Mumbai, Delhi NCR, Bengaluru, Hyderabad, Chennai, Kolkata, Pune) are delivered within 2–3 business days. Rest of India arrives within 3–5 business days.
               </p>
             </div>
           </div>
