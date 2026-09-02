@@ -15,11 +15,7 @@ const announcements = [
     link: "/collections/monochrome-vault",
     highlight: "DROP 04 IS LIVE",
   },
-  {
-    text: "USE CODE 'CALLY10' FOR 10% OFF YOUR FIRST ROTATION",
-    link: "/shop",
-    highlight: "CODE 'CALLY10'",
-  },
+
   {
     text: "HASSLE-FREE 7-DAY DOORSTEP EXCHANGES & EASY RETURNS",
     link: "/shipping-returns",

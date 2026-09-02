@@ -42,7 +42,7 @@ export default function RegisterPage() {
         <div className="text-center space-y-2">
           <Logo size="lg" />
           <h1 className="font-display font-black text-2xl uppercase tracking-tight text-[#12110E] pt-2">
-            Create VIP Account
+            Create Cally Account
           </h1>
           <p className="text-xs text-[#6B665F]">
             Join the inner circle for priority drop alerts and exclusive releases.

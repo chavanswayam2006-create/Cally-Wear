@@ -69,7 +69,7 @@ export default function AccountPage() {
               href="/account/register"
               className="w-full py-3.5 bg-white border border-[#12110E] hover:bg-[#FAF8F5] text-[#12110E] font-display font-black text-xs uppercase tracking-wider transition-colors flex items-center justify-center gap-2"
             >
-              <span>Create VIP Account</span>
+              <span>Create Cally Account</span>
             </Link>
           </div>
 
