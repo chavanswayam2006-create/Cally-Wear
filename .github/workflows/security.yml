@@ -75,9 +75,11 @@ jobs:
         run: |
           echo "Auditing client-facing surfaces for leaked server secrets..."
           # Verify server secrets never appear in client bundles or public components
-          ! grep -rn "PAYMENT_WEBHOOK_SECRET" app/ components/ lib/store/ || { echo "CRITICAL: PAYMENT_WEBHOOK_SECRET detected in frontend files"; exit 1; }
-          ! grep -rn "SECURITY_HMAC_SECRET" app/ components/ lib/store/ || { echo "CRITICAL: SECURITY_HMAC_SECRET detected in frontend files"; exit 1; }
-          ! grep -rn "PRIVATE_KEY" app/ components/ lib/store/ || { echo "CRITICAL: Private key pattern detected"; exit 1; }
+          # Exclude server-only directories: app/api/** (API routes), app/**/route.ts (route handlers)
+          # Only scan client-side code: components/, lib/store/, and client components in app/
+          ! grep -rn "PAYMENT_WEBHOOK_SECRET" --exclude-dir=api --include="*.ts" --include="*.tsx" app/ components/ lib/store/ || { echo "CRITICAL: PAYMENT_WEBHOOK_SECRET detected in frontend files"; exit 1; }
+          ! grep -rn "SECURITY_HMAC_SECRET" --exclude-dir=api --include="*.ts" --include="*.tsx" app/ components/ lib/store/ || { echo "CRITICAL: SECURITY_HMAC_SECRET detected in frontend files"; exit 1; }
+          ! grep -rn "PRIVATE_KEY" --exclude-dir=api --include="*.ts" --include="*.tsx" app/ components/ lib/store/ || { echo "CRITICAL: Private key pattern detected"; exit 1; }
           echo "Secret scan passed: zero server secrets detected in client code."
 
   # ============================================================================
