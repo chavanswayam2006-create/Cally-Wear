@@ -3,9 +3,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import anime from "animejs";
 import {
   ArrowRight,
   Shield,
@@ -15,10 +12,6 @@ import {
   ChevronRight,
   Sparkles,
 } from "lucide-react";
-
-if (typeof window !== "undefined") {
-  gsap.registerPlugin(ScrollTrigger);
-}
 
 export interface ShowcaseChapter {
   id: string;
@@ -172,115 +165,125 @@ export function ScrollShowcase() {
     const container = containerRef.current;
     const stage = stageRef.current;
     const shoe = shoeImageRef.current;
-    const chapterEls = gsap.utils.toArray<HTMLElement>(".showcase-chapter");
+    let tl: any = null;
+    let scrollTriggerInstance: any = null;
 
-    if (!shoe || chapterEls.length === 0) return;
+    Promise.all([
+      import("gsap"),
+      import("gsap/ScrollTrigger"),
+    ]).then(([{ default: gsap }, { ScrollTrigger }]) => {
+      gsap.registerPlugin(ScrollTrigger);
 
-    // Reset initial states
-    gsap.set(shoe, {
-      transformPerspective: 1200,
-      rotateY: -8,
-      rotateX: 6,
-      scale: 1,
-      transformOrigin: "center center",
-      willChange: "transform",
-    });
+      const chapterEls = gsap.utils.toArray<HTMLElement>(".showcase-chapter");
+      if (!shoe || chapterEls.length === 0) return;
 
-    chapterEls.forEach((el, index) => {
-      if (index === 0) {
-        gsap.set(el, { opacity: 1, y: 0, scale: 1, pointerEvents: "auto" });
-      } else {
-        gsap.set(el, { opacity: 0, y: 60, scale: 0.94, pointerEvents: "none" });
+      // Reset initial states
+      gsap.set(shoe, {
+        transformPerspective: 1200,
+        rotateY: -8,
+        rotateX: 6,
+        scale: 1,
+        transformOrigin: "center center",
+        willChange: "transform",
+      });
+
+      chapterEls.forEach((el, index) => {
+        if (index === 0) {
+          gsap.set(el, { opacity: 1, y: 0, scale: 1, pointerEvents: "auto" });
+        } else {
+          gsap.set(el, { opacity: 0, y: 60, scale: 0.94, pointerEvents: "none" });
+        }
+      });
+
+      // Create Pinning Timeline
+      tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: container,
+          start: "top top",
+          end: "bottom bottom",
+          pin: stage,
+          scrub: 0.8,
+          anticipatePin: 1,
+          onUpdate: (self) => {
+            const progress = self.progress;
+            const chapterCount = items.length;
+            const currentIndex = Math.min(
+              Math.floor(progress * chapterCount),
+              chapterCount - 1
+            );
+            setActiveChapterIndex(currentIndex);
+          },
+          onLeave: () => {
+            if (shoe) shoe.style.willChange = "auto";
+          },
+          onEnterBack: () => {
+            if (shoe) shoe.style.willChange = "transform";
+          },
+        },
+      });
+
+      scrollTriggerInstance = tl.scrollTrigger;
+
+      // Animate chapters sequentially
+      const totalChapters = chapterEls.length;
+      const stepDuration = 1 / totalChapters;
+
+      // Shoe 3D tilt progression throughout the scroll runway
+      tl.to(shoe, {
+        rotateY: 8,
+        rotateX: -6,
+        scale: 1.06,
+        ease: "power1.inOut",
+        duration: 1,
+      }, 0);
+
+      // Transitions between chapters
+      for (let i = 0; i < totalChapters - 1; i++) {
+        const currentChapter = chapterEls[i];
+        const nextChapter = chapterEls[i + 1];
+        const transitionTime = (i + 1) * stepDuration - stepDuration * 0.2;
+
+        // Outgoing chapter: recedes and fades
+        tl.to(
+          currentChapter,
+          {
+            opacity: 0,
+            y: -40,
+            scale: 0.96,
+            ease: "power2.in",
+            duration: stepDuration * 0.4,
+            pointerEvents: "none",
+          },
+          transitionTime
+        );
+
+        // Incoming chapter: emerges from behind shoe with clip-path expansion
+        tl.fromTo(
+          nextChapter,
+          {
+            opacity: 0,
+            y: 50,
+            scale: 0.92,
+            pointerEvents: "none",
+          },
+          {
+            opacity: 1,
+            y: 0,
+            scale: 1,
+            ease: "power2.out",
+            duration: stepDuration * 0.4,
+            pointerEvents: "auto",
+          },
+          transitionTime + stepDuration * 0.2
+        );
       }
+    }).catch((err) => {
+      console.warn("GSAP timeline initialization fallback:", err);
     });
-
-    // Create Pinning Timeline
-    const tl = gsap.timeline({
-      scrollTrigger: {
-        trigger: container,
-        start: "top top",
-        end: "bottom bottom",
-        pin: stage,
-        scrub: 0.8,
-        anticipatePin: 1,
-        onUpdate: (self) => {
-          // Track active chapter for progress indicators
-          const progress = self.progress;
-          const chapterCount = items.length;
-          const currentIndex = Math.min(
-            Math.floor(progress * chapterCount),
-            chapterCount - 1
-          );
-          setActiveChapterIndex(currentIndex);
-        },
-        onLeave: () => {
-          if (shoe) shoe.style.willChange = "auto";
-        },
-        onEnterBack: () => {
-          if (shoe) shoe.style.willChange = "transform";
-        },
-      },
-    });
-
-    // Animate chapters sequentially
-    const totalChapters = chapterEls.length;
-    const stepDuration = 1 / totalChapters;
-
-    // Shoe 3D tilt progression throughout the scroll runway
-    tl.to(shoe, {
-      rotateY: 8,
-      rotateX: -6,
-      scale: 1.06,
-      ease: "power1.inOut",
-      duration: 1,
-    }, 0);
-
-    // Transitions between chapters
-    for (let i = 0; i < totalChapters - 1; i++) {
-      const currentChapter = chapterEls[i];
-      const nextChapter = chapterEls[i + 1];
-      const transitionTime = (i + 1) * stepDuration - stepDuration * 0.2;
-
-      // Outgoing chapter: recedes and fades
-      tl.to(
-        currentChapter,
-        {
-          opacity: 0,
-          y: -40,
-          scale: 0.96,
-          ease: "power2.in",
-          duration: stepDuration * 0.4,
-          pointerEvents: "none",
-        },
-        transitionTime
-      );
-
-      // Incoming chapter: emerges from behind shoe with clip-path expansion
-      tl.fromTo(
-        nextChapter,
-        {
-          opacity: 0,
-          y: 50,
-          scale: 0.92,
-          pointerEvents: "none",
-        },
-        {
-          opacity: 1,
-          y: 0,
-          scale: 1,
-          ease: "power2.out",
-          duration: stepDuration * 0.4,
-          pointerEvents: "auto",
-        },
-        transitionTime + stepDuration * 0.2
-      );
-    }
 
     return () => {
-      tl.kill();
-      ScrollTrigger.getAll().forEach((st) => {
-        if (st.vars.trigger === container) st.kill();
-      });
+      if (tl) tl.kill();
+      if (scrollTriggerInstance) scrollTriggerInstance.kill();
     };
   }, [items, reducedMotion]);
 
@@ -288,45 +291,52 @@ export function ScrollShowcase() {
   useEffect(() => {
     if (reducedMotion) return;
 
-    const currentTitleEl = document.querySelector(
-      `.chapter-${activeChapterIndex} .reveal-title`
-    );
-    if (currentTitleEl) {
-      anime({
-        targets: currentTitleEl,
-        opacity: [0, 1],
-        translateY: [15, 0],
-        easing: "easeOutExpo",
-        duration: 800,
-      });
-    }
+    import("animejs").then((mod) => {
+      const anime = (mod as any).default || mod;
 
-    const currentBadgeEl = document.querySelector(
-      `.chapter-${activeChapterIndex} .reveal-badge`
-    );
-    if (currentBadgeEl) {
-      anime({
-        targets: currentBadgeEl,
-        opacity: [0, 1],
-        scale: [0.92, 1],
-        easing: "easeOutBack",
-        duration: 600,
-      });
-    }
+      const currentTitleEl = document.querySelector(
+        `.chapter-${activeChapterIndex} .reveal-title`
+      );
+      if (currentTitleEl) {
+        anime({
+          targets: currentTitleEl,
+          opacity: [0, 1],
+          translateY: [15, 0],
+          easing: "easeOutExpo",
+          duration: 800,
+        });
+      }
+
+      const currentBadgeEl = document.querySelector(
+        `.chapter-${activeChapterIndex} .reveal-badge`
+      );
+      if (currentBadgeEl) {
+        anime({
+          targets: currentBadgeEl,
+          opacity: [0, 1],
+          scale: [0.92, 1],
+          easing: "easeOutBack",
+          duration: 600,
+        });
+      }
+    }).catch(() => {});
   }, [activeChapterIndex, reducedMotion]);
 
   // anime.js CTA Button Magnetic Hover Micro-Interaction
   const handleCtaHover = (enter: boolean) => {
     if (!ctaButtonRef.current || reducedMotion) return;
-    anime({
-      targets: ctaButtonRef.current,
-      scale: enter ? 1.03 : 1,
-      boxShadow: enter
-        ? "0 10px 25px -5px rgba(232, 93, 44, 0.4)"
-        : "0 0px 0px 0px rgba(232, 93, 44, 0)",
-      duration: 350,
-      easing: "easeOutQuad",
-    });
+    import("animejs").then((mod) => {
+      const anime = (mod as any).default || mod;
+      anime({
+        targets: ctaButtonRef.current,
+        scale: enter ? 1.03 : 1,
+        boxShadow: enter
+          ? "0 10px 25px -5px rgba(232, 93, 44, 0.4)"
+          : "0 0px 0px 0px rgba(232, 93, 44, 0)",
+        duration: 350,
+        easing: "easeOutQuad",
+      });
+    }).catch(() => {});
   };
 
   // Resolve active hero product & image

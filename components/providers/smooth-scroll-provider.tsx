@@ -1,56 +1,67 @@
 "use client";
 
 import React, { useEffect, useRef } from "react";
-import Lenis from "lenis";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-
-// Register ScrollTrigger once on the client
-if (typeof window !== "undefined") {
-  gsap.registerPlugin(ScrollTrigger);
-}
 
 interface SmoothScrollProviderProps {
   children: React.ReactNode;
 }
 
 export function SmoothScrollProvider({ children }: SmoothScrollProviderProps) {
-  const lenisRef = useRef<Lenis | null>(null);
+  const lenisRef = useRef<any>(null);
 
   useEffect(() => {
-    // Check prefers-reduced-motion
-    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (prefersReducedMotion) {
+    // Respect prefers-reduced-motion
+    if (typeof window === "undefined" || window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
       return;
     }
 
-    // Initialize Lenis with weighted easing
-    const lenis = new Lenis({
-      duration: 1.2,
-      easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      orientation: "vertical",
-      gestureOrientation: "vertical",
-      smoothWheel: true,
-      wheelMultiplier: 0.9,
-      touchMultiplier: 1.5,
-    });
+    let tickerUpdate: ((time: number) => void) | null = null;
+    let gsapInstance: any = null;
 
-    lenisRef.current = lenis;
+    // Dynamically load animation libraries strictly in browser runtime
+    Promise.all([
+      import("lenis"),
+      import("gsap"),
+      import("gsap/ScrollTrigger"),
+    ])
+      .then(([{ default: Lenis }, { default: gsap }, { ScrollTrigger }]) => {
+        gsapInstance = gsap;
+        gsap.registerPlugin(ScrollTrigger);
 
-    // Connect Lenis to ScrollTrigger
-    lenis.on("scroll", ScrollTrigger.update);
+        const lenis = new Lenis({
+          duration: 1.2,
+          easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+          orientation: "vertical",
+          gestureOrientation: "vertical",
+          smoothWheel: true,
+          wheelMultiplier: 0.9,
+          touchMultiplier: 1.5,
+        });
 
-    const updateTicker = (time: number) => {
-      lenis.raf(time * 1000);
-    };
+        lenisRef.current = lenis;
 
-    gsap.ticker.add(updateTicker);
-    gsap.ticker.lagSmoothing(0);
+        // Synchronize Lenis scroll position with GSAP ScrollTrigger
+        lenis.on("scroll", ScrollTrigger.update);
+
+        tickerUpdate = (time: number) => {
+          lenis.raf(time * 1000);
+        };
+
+        gsap.ticker.add(tickerUpdate);
+        gsap.ticker.lagSmoothing(0);
+      })
+      .catch((err) => {
+        console.warn("Smooth scroll initialization fallback:", err);
+      });
 
     return () => {
-      gsap.ticker.remove(updateTicker);
-      lenis.destroy();
-      lenisRef.current = null;
+      if (tickerUpdate && gsapInstance) {
+        gsapInstance.ticker.remove(tickerUpdate);
+      }
+      if (lenisRef.current) {
+        lenisRef.current.destroy();
+        lenisRef.current = null;
+      }
     };
   }, []);
 

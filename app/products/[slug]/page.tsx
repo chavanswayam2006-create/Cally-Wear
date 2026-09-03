@@ -9,13 +9,22 @@ interface Props {
 }
 
 export async function generateStaticParams() {
-  return products.map((product) => ({
-    slug: product.slug,
-  }));
+  const list = Array.isArray(products) ? products : [];
+  return list
+    .filter((product) => Boolean(product && typeof product.slug === "string" && product.slug.trim()))
+    .map((product) => ({
+      slug: product.slug,
+    }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { slug } = await params;
+  const resolved = await params;
+  if (!resolved || !resolved.slug) {
+    return {
+      title: "Product Not Found",
+    };
+  }
+  const slug = resolved.slug;
   const product = getProductBySlug(slug);
 
   if (!product) {
@@ -46,7 +55,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function ProductPage({ params }: Props) {
-  const { slug } = await params;
+  const resolved = await params;
+  if (!resolved || !resolved.slug) {
+    notFound();
+  }
+  const slug = resolved.slug;
   const product = getProductBySlug(slug);
 
   if (!product) {

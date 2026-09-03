@@ -831,9 +831,21 @@ export function getLiveProducts(): Product[] {
 }
 
 export const products: Product[] = new Proxy(initialSeedProducts, {
-  get(target, prop, receiver) {
+  get(target, prop) {
     const live = getLiveProducts();
-    return Reflect.get(live, prop, receiver);
+    const val = (live as any)[prop];
+    if (typeof val === "function") {
+      return val.bind(live);
+    }
+    return val;
+  },
+  ownKeys() {
+    const live = getLiveProducts();
+    return Reflect.ownKeys(live);
+  },
+  getOwnPropertyDescriptor(target, prop) {
+    const live = getLiveProducts();
+    return Object.getOwnPropertyDescriptor(live, prop);
   },
 });
 
