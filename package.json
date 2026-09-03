@@ -16,7 +16,7 @@
     "postcss": "^8.5.23"
   },
   "dependencies": {
-    "@hookform/resolvers": "^3.9.1",
+    "@hookform/resolvers": "^5.9.1",
     "@prisma/client": "^5.22.0",
     "@supabase/supabase-js": "^2.114.0",
     "@tanstack/react-table": "^9.2.4",
