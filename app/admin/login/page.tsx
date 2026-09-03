@@ -10,8 +10,8 @@ export default function AdminLoginPage() {
   const searchParams = useSearchParams();
   const redirectPath = searchParams.get("redirect") || "/admin";
 
-  const [email, setEmail] = useState("admin@callywear.com");
-  const [password, setPassword] = useState("CallyAdmin2026!");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -83,7 +83,8 @@ export default function AdminLoginPage() {
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="admin@callywear.com"
+                placeholder="name@company.com"
+                autoComplete="off"
                 className="w-full pl-10 pr-4 py-3 bg-[#12110E] border border-[#282622] text-white text-xs font-medium focus:outline-none focus:border-[#E85D2C] placeholder:text-[#6B665F]"
               />
             </div>
@@ -101,15 +102,10 @@ export default function AdminLoginPage() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••••••"
+                autoComplete="new-password"
                 className="w-full pl-10 pr-4 py-3 bg-[#12110E] border border-[#282622] text-white text-xs font-medium focus:outline-none focus:border-[#E85D2C] placeholder:text-[#6B665F]"
               />
             </div>
-          </div>
-
-          <div className="p-3 bg-[#12110E] border border-[#282622] text-[11px] text-[#99948D] space-y-1">
-            <p className="font-semibold text-white">Default Seed Admin Credentials:</p>
-            <p>Email: <code className="text-[#E85D2C]">admin@callywear.com</code></p>
-            <p>Password: <code className="text-[#E85D2C]">CallyAdmin2026!</code></p>
           </div>
 
           <button

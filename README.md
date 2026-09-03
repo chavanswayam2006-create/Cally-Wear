@@ -34,3 +34,16 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+---
+
+## Local Dev Only
+
+### Seed Admin Credentials
+For local development and testing, default seed administrator credentials are provided:
+
+- **Email:** `admin@callywear.com` (configurable via `ADMIN_SEED_EMAIL`)
+- **Password:** `CallyAdmin2026!` (configurable via `ADMIN_SEED_PASSWORD`)
+
+> **Security Notice:** Admin credentials must never be exposed or pre-filled in the frontend UI. For production environments, ensure strong, unique credentials are set via environment variables.
+

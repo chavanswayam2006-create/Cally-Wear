@@ -23,8 +23,8 @@ interface AuthState {
   user: UserProfile | null;
   isAuthenticated: boolean;
   isLoading: boolean;
-  login: (email: string, password?: string) => Promise<{ success: boolean; error?: string }>;
-  register: (name: string, email: string, password?: string, phone?: string) => Promise<{ success: boolean; error?: string }>;
+  login: (email: string, password: string) => Promise<{ success: boolean; error?: string }>;
+  register: (name: string, email: string, password: string, phone?: string) => Promise<{ success: boolean; error?: string }>;
   logout: () => Promise<void>;
   checkSession: () => Promise<void>;
   updateProfile: (profile: Partial<UserProfile>) => Promise<void>;
@@ -35,7 +35,7 @@ export const useAuthStore = create<AuthState>((set) => ({
   isAuthenticated: false,
   isLoading: false,
 
-  login: async (email: string, password: string = "Password123!") => {
+  login: async (email: string, password: string) => {
     set({ isLoading: true });
     try {
       const res = await fetch("/api/auth/login", {
@@ -56,7 +56,7 @@ export const useAuthStore = create<AuthState>((set) => ({
     }
   },
 
-  register: async (name: string, email: string, password: string = "Password123!", phone: string = "") => {
+  register: async (name: string, email: string, password: string, phone: string = "") => {
     set({ isLoading: true });
     try {
       const res = await fetch("/api/auth/register", {

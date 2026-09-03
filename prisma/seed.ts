@@ -28,6 +28,8 @@ async function main() {
     },
   });
   console.log(`✅ Admin profile seeded: ${adminProfile.email}`);
+  console.log(`   [Local Dev Only] Admin Email:    ${adminEmail}`);
+  console.log(`   [Local Dev Only] Admin Password: ${adminPassword}`);
 
   // 2. Seed Starter Sections
   const starterSections = [
