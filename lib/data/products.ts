@@ -6,7 +6,7 @@ import { Product } from "@/lib/types/product";
  * Easily swappable catalog seed data.
  * To replace with real catalog: update the products array below with the same Product schema.
  */
-export const products: Product[] = [
+const initialSeedProducts: Product[] = [
   {
     id: "cw-prod-01",
     slug: "cally-apex-tech-runner",
@@ -751,37 +751,127 @@ export const products: Product[] = [
   }
 ];
 
+import { localDb } from "@/lib/db";
+
+export function getLiveProducts(): Product[] {
+  if (typeof window !== "undefined") {
+    return initialSeedProducts;
+  }
+  try {
+    const state = localDb?.state;
+    if (state && Array.isArray(state.products) && state.products.length > 0) {
+      // Filter only PUBLISHED products for storefront (Section 3: DRAFT products never show on storefront)
+      const published = state.products.filter((p: any) => p.status === "PUBLISHED");
+      if (published.length > 0) {
+        return published.map((p: any) => {
+          const images = state.productImages
+            .filter((img: any) => img.productId === p.id)
+            .sort((a: any, b: any) => a.sortOrder - b.sortOrder)
+            .map((img: any) => img.url);
+
+          const variants = state.productVariants.filter((v: any) => v.productId === p.id);
+          const sizes = variants.map((v: any) => v.size);
+          const stock = variants.reduce((sum: number, v: any) => sum + v.stock, 0);
+
+          const pSections = state.productSections
+            .filter((ps: any) => ps.productId === p.id)
+            .map((ps: any) => state.sections.find((s: any) => s.id === ps.sectionId)?.slug)
+            .filter(Boolean);
+
+          const isMen = pSections.includes("men");
+          const isWomen = pSections.includes("women");
+          const category: "men" | "women" | "unisex" = isMen && !isWomen ? "men" : !isMen && isWomen ? "women" : "unisex";
+
+          // Section 8 rule:
+          // If isOnSale = false, display basePrice only, even if salePrice is set.
+          const price = p.isOnSale && p.salePrice ? p.salePrice : p.basePrice;
+          const compareAtPrice = p.isOnSale && p.salePrice ? p.basePrice : undefined;
+
+          return {
+            id: p.id,
+            slug: p.slug,
+            name: p.name,
+            category,
+            subCategory: "sneakers",
+            price,
+            compareAtPrice,
+            images: images.length > 0 ? images : ["https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=1200&q=80"],
+            colors: [
+              {
+                name: "Obsidian Core",
+                hex: "#161616",
+                images: images,
+              },
+            ],
+            sizes: sizes.length > 0 ? sizes : ["UK 7", "UK 8", "UK 9", "UK 10"],
+            description: p.description,
+            materials: p.materials,
+            stock,
+            isNew: p.isNewArrival,
+            isFeatured: p.isFeatured,
+            tags: [
+              p.isOnSale ? "Sale" : "",
+              p.isNewArrival ? "Drop 04" : "",
+              p.isFeatured ? "Best Seller" : "",
+              ...pSections.map((s: any) => s?.replace(/-/g, " ") || ""),
+            ].filter(Boolean),
+            details: [
+              "Dynamic heel stabilizer clip for rotational lock-in",
+              "Ergonomic dual-density anatomical footbed",
+              p.materials || "Premium construction",
+            ],
+          };
+        });
+      }
+    }
+  } catch {
+    // fallback to static seed array
+  }
+  return initialSeedProducts;
+}
+
+export const products: Product[] = new Proxy(initialSeedProducts, {
+  get(target, prop, receiver) {
+    const live = getLiveProducts();
+    return Reflect.get(live, prop, receiver);
+  },
+});
+
 export function getProductBySlug(slug: string): Product | undefined {
-  return products.find((p) => p.slug === slug);
+  const currentCatalog = getLiveProducts();
+  return currentCatalog.find((p) => p.slug === slug);
 }
 
 export function getProductsByCategory(category: "men" | "women" | "unisex" | "all"): Product[] {
-  if (category === "all") return products;
-  return products.filter((p) => p.category === category || p.category === "unisex");
+  const currentCatalog = getLiveProducts();
+  if (category === "all") return currentCatalog;
+  return currentCatalog.filter((p) => p.category === category || p.category === "unisex");
 }
 
 export function getFeaturedProducts(): Product[] {
-  return products.filter((p) => p.isFeatured);
+  const currentCatalog = getLiveProducts();
+  return currentCatalog.filter((p) => p.isFeatured);
 }
 
 export function getNewArrivals(): Product[] {
-  return products.filter((p) => p.isNew || p.tags?.includes("Drop 04"));
+  const currentCatalog = getLiveProducts();
+  return currentCatalog.filter((p) => p.isNew || p.tags?.includes("Drop 04"));
 }
 
 export function getBestSellers(): Product[] {
-  // Select high-rotation street classics, platforms, and slides EXCLUDING fresh Drop 04 / New Arrivals
-  // to ensure "New Arrivals" and "Trending Now" homepage rails show distinct merchandise (CW-017)
-  return products.filter((p) => {
+  const currentCatalog = getLiveProducts();
+  return currentCatalog.filter((p) => {
     const isNewArrival = p.isNew || p.tags?.includes("Drop 04");
-    const isBestSeller = p.isFeatured || p.tags?.includes("Icon") || p.tags?.includes("Essential");
+    const isBestSeller = p.isFeatured || p.tags?.includes("Icon") || p.tags?.includes("Essential") || p.tags?.includes("Best Seller");
     return isBestSeller && !isNewArrival;
   });
 }
 
 export function getRelatedProducts(currentProductId: string, limit: number = 4): Product[] {
-  const current = products.find((p) => p.id === currentProductId);
-  if (!current) return products.slice(0, limit);
-  return products
+  const currentCatalog = getLiveProducts();
+  const current = currentCatalog.find((p) => p.id === currentProductId);
+  if (!current) return currentCatalog.slice(0, limit);
+  return currentCatalog
     .filter((p) => p.id !== currentProductId && (p.category === current.category || p.subCategory === current.subCategory))
     .slice(0, limit);
 }

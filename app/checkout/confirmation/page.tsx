@@ -22,8 +22,21 @@ function ConfirmationContent() {
   const searchParams = useSearchParams();
   const orderId = searchParams.get("orderId");
   const { currentOrder, getOrderByNumber } = useOrderStore();
+  const [serverOrder, setServerOrder] = useState<any>(null);
 
-  const order = (orderId ? getOrderByNumber(orderId) : currentOrder) || currentOrder;
+  useEffect(() => {
+    if (orderId) {
+      fetch(`/api/orders/${orderId}`)
+        .then((r) => r.json())
+        .then((data) => {
+          if (data.order) setServerOrder(data.order);
+        })
+        .catch(() => {});
+    }
+  }, [orderId]);
+
+  const localOrder = (orderId ? getOrderByNumber(orderId) : currentOrder) || currentOrder;
+  const order = serverOrder || localOrder;
 
   return (
     <div className="min-h-screen bg-[#FAF8F5] py-12 md:py-16">
@@ -108,7 +121,7 @@ function ConfirmationContent() {
                 Items In This Shipment ({order.items.length})
               </h3>
               <div className="divide-y divide-[#F2EDE4] space-y-3">
-                {order.items.map((item) => (
+                {order.items.map((item: any) => (
                   <div key={item.id} className="pt-3 first:pt-0 flex items-center gap-4">
                     <div className="relative w-16 h-20 bg-[#F2EDE4] border border-[#E4DFD5] overflow-hidden shrink-0">
                       <Image src={item.image} alt={item.name} fill className="object-cover" />

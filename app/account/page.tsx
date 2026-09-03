@@ -25,7 +25,8 @@ import { formatPrice } from "@/lib/utils";
 export default function AccountPage() {
   const [mounted, setMounted] = useState(false);
   const { user, isAuthenticated, logout, checkSession } = useAuthStore();
-  const { orders } = useOrderStore();
+  const { orders: localOrders } = useOrderStore();
+  const [serverOrders, setServerOrders] = useState<any[]>([]);
   const { items: wishlistItems } = useWishlistStore();
   const [activeTab, setActiveTab] = useState<"orders" | "addresses" | "wishlist">("orders");
 
@@ -34,6 +35,21 @@ export default function AccountPage() {
       setMounted(true);
     });
   }, [checkSession]);
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      fetch("/api/account/orders")
+        .then((r) => r.json())
+        .then((data) => {
+          if (data.orders && Array.isArray(data.orders)) {
+            setServerOrders(data.orders);
+          }
+        })
+        .catch(() => {});
+    }
+  }, [isAuthenticated]);
+
+  const orders = serverOrders.length > 0 ? serverOrders : localOrders;
 
   // Server-side & initial client render: secure logged-out state (Zero PII leak)
   if (!mounted || !isAuthenticated || !user) {
@@ -218,7 +234,7 @@ export default function AccountPage() {
 
                     {/* Order items */}
                     <div className="divide-y divide-[#F2EDE4] space-y-3 pt-2">
-                      {order.items.map((item) => (
+                      {order.items.map((item: any) => (
                         <div key={item.id} className="pt-3 first:pt-0 flex items-center justify-between gap-4">
                           <div className="flex items-center gap-3">
                             <div className="relative w-12 h-14 bg-[#F2EDE4] border border-[#E4DFD5] shrink-0 overflow-hidden">
@@ -242,9 +258,17 @@ export default function AccountPage() {
 
                     {/* Footer tracking */}
                     <div className="pt-4 border-t border-[#E4DFD5] flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
-                      <div className="flex items-center gap-2 text-[#6B665F]">
-                        <Truck className="w-4 h-4 text-[#E85D2C]" />
-                        <span>Tracking: <strong className="text-[#12110E] font-mono">{order.trackingNumber || `TRK-${order.orderNumber}`}</strong></span>
+                      <div className="flex flex-wrap items-center gap-3 text-[#6B665F]">
+                        <div className="flex items-center gap-2">
+                          <Truck className="w-4 h-4 text-[#E85D2C]" />
+                          <span>Tracking: <strong className="text-[#12110E] font-mono">{order.trackingNumber || `TRK-${order.orderNumber}`}</strong></span>
+                          {order.carrier && <span className="text-[11px] font-mono text-[#8C877E]">({order.carrier})</span>}
+                        </div>
+                        {order.paymentStatus && (
+                          <span className="px-2 py-0.5 bg-[#FAF8F5] border border-[#E4DFD5] text-[10px] font-mono font-bold uppercase text-[#12110E]">
+                            Payment: {order.paymentStatus}
+                          </span>
+                        )}
                       </div>
 
                       <Link
