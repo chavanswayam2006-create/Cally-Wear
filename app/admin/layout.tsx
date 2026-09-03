@@ -15,6 +15,7 @@ import {
   Shield,
   Menu,
   X,
+  Sparkles,
 } from "lucide-react";
 import { Logo } from "@/components/logo";
 
@@ -59,6 +60,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
   const navItems = [
     { label: "Overview", href: "/admin", icon: LayoutDashboard },
     { label: "Products", href: "/admin/products", icon: Package },
+    { label: "Scroll Showcase", href: "/admin/scroll-showcase", icon: Sparkles },
     { label: "Sections / Drops", href: "/admin/sections", icon: Layers },
     { label: "Bulk Import", href: "/admin/products/bulk-import", icon: UploadCloud },
     { label: "Orders", href: "/admin/orders", icon: ShoppingBag },

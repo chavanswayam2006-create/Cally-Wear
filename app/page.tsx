@@ -3,6 +3,7 @@ import { HeroSlider } from "@/components/home/hero-slider";
 import { NewArrivals } from "@/components/home/new-arrivals";
 import { CategoryTiles } from "@/components/home/category-tiles";
 import { TrendingSection } from "@/components/home/trending-section";
+import { ScrollShowcase } from "@/components/home/scroll-showcase";
 import { EditorialBlocks } from "@/components/home/editorial-blocks";
 import { InstagramStrip } from "@/components/home/instagram-strip";
 
@@ -26,7 +27,10 @@ export default function HomePage() {
       {/* 4. Trending Now Tabbed Grid (Best Sellers & Street Heat) */}
       <TrendingSection products={bestSellers} />
 
-      {/* 5. Highsnobiety / END. Editorial Storytelling */}
+      {/* 5. Signature Scroll Showcase (Interactive Pinned 3D Deconstruction) */}
+      <ScrollShowcase />
+
+      {/* 6. Highsnobiety / END. Editorial Storytelling */}
       <EditorialBlocks />
 
       {/* 6. Instagram Visual Strip */}

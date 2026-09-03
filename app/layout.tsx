@@ -55,6 +55,8 @@ export const metadata: Metadata = {
   },
 };
 
+import { SmoothScrollProvider } from "@/components/providers/smooth-scroll-provider";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -66,20 +68,22 @@ export default function RootLayout({
       className={`${spaceGrotesk.variable} ${plusJakartaSans.variable} font-sans h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-[#FAF8F5] text-[#12110E]">
-        {/* Top Announcement Bar */}
-        <AnnouncementBar />
+        <SmoothScrollProvider>
+          {/* Top Announcement Bar */}
+          <AnnouncementBar />
 
-        {/* Global Sticky Header */}
-        <Header />
+          {/* Global Sticky Header */}
+          <Header />
 
-        {/* Main Application Body */}
-        <main className="flex-1">{children}</main>
+          {/* Main Application Body */}
+          <main className="flex-1">{children}</main>
 
-        {/* Slide-out Cart Drawer */}
-        <CartDrawer />
+          {/* Slide-out Cart Drawer */}
+          <CartDrawer />
 
-        {/* Global Brand Footer */}
-        <Footer />
+          {/* Global Brand Footer */}
+          <Footer />
+        </SmoothScrollProvider>
       </body>
     </html>
   );

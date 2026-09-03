@@ -63,6 +63,7 @@ model Product {
   variants        ProductVariant[]
   sections        ProductSection[]
   orderItems      OrderItem[]
+  scrollShowcaseItems ScrollShowcaseItem[]
   createdAt       DateTime         @default(now())
   updatedAt       DateTime         @updatedAt
 
@@ -214,4 +215,20 @@ model PaymentLogEvent {
   createdAt   DateTime      @default(now())
 
   @@index([paymentId])
+}
+
+model ScrollShowcaseItem {
+  id                   String   @id @default(cuid())
+  product              Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  productId            String
+  displayOrder         Int      @default(0)
+  isActive             Boolean  @default(true)
+  overrideImageUrl     String?
+  highlightLabel       String   // e.g. "NITROGEN-INJECTED FOAM"
+  highlightDescription String   // Chapter supporting copy
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+
+  @@index([productId])
+  @@index([isActive, displayOrder])
 }

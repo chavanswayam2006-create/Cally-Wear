@@ -71,6 +71,24 @@
       "role": "CUSTOMER",
       "passwordHash": null,
       "createdAt": "2026-09-03T12:47:50.754Z"
+    },
+    {
+      "id": "prof_1788462178077_tpi9l",
+      "email": "customer_1788462178058@callywear-test.com",
+      "fullName": "Showcase Tester",
+      "phone": null,
+      "role": "CUSTOMER",
+      "passwordHash": "$2b$10$Pxd3xlJYWdgnX8mJ5TOUxuWJEmA0MsVMAt1U2GzW1fHTaSNn6e/lq",
+      "createdAt": "2026-09-03T19:02:58.155Z"
+    },
+    {
+      "id": "prof_1788462217779_l5vrg",
+      "email": "customer_1788462217768@callytest.com",
+      "fullName": "Alex Mercer",
+      "phone": "+91 98765 43210",
+      "role": "CUSTOMER",
+      "passwordHash": "$2b$10$4gVgYcnG22moiIiOj59yGu72W1sZWctgP2RX8m3zWvhqgm8.QhyeC",
+      "createdAt": "2026-09-03T19:03:37.847Z"
     }
   ],
   "addresses": [],
@@ -380,6 +398,74 @@
       "status": "PUBLISHED",
       "createdAt": "2026-09-03T12:47:38.132Z",
       "updatedAt": "2026-09-03T12:47:38.132Z"
+    },
+    {
+      "id": "prod_1788462217949_2gyz",
+      "name": "Velocity Phantom X",
+      "slug": "velocity-phantom-x-1788462217929",
+      "sku": "CW-TEST-1628",
+      "description": "Next-generation ultra-cushioned technical runner with ballistic ripstop mesh.",
+      "materials": "Full-grain nubuck, recycled TPU cage, Vibram Megagrip outsole",
+      "basePrice": 14999,
+      "salePrice": 11999,
+      "isOnSale": true,
+      "discountPercent": 20,
+      "isFeatured": true,
+      "isNewArrival": true,
+      "status": "PUBLISHED",
+      "createdAt": "2026-09-03T19:03:37.949Z",
+      "updatedAt": "2026-09-03T19:03:37.949Z"
+    },
+    {
+      "id": "prod_1788462217977_pnys",
+      "name": "Secret Prototype Model",
+      "slug": "secret-prototype-1788462217964",
+      "sku": "CW-DRAFT-4944",
+      "description": "Unreleased internal concept",
+      "materials": "Composite mesh",
+      "basePrice": 19999,
+      "salePrice": null,
+      "isOnSale": false,
+      "discountPercent": null,
+      "isFeatured": false,
+      "isNewArrival": false,
+      "status": "DRAFT",
+      "createdAt": "2026-09-03T19:03:37.977Z",
+      "updatedAt": "2026-09-03T19:03:37.977Z"
+    },
+    {
+      "id": "prod_1788462217999_8zn9",
+      "name": "Matrix Lowtop Neon",
+      "slug": "matrix-lowtop-neon-cw-bulk-1-1788462217993",
+      "sku": "CW-BULK-1-1788462217993",
+      "description": "Lightweight city commuter sneaker",
+      "materials": "Engineered mesh, recycled foam",
+      "basePrice": 8999,
+      "salePrice": null,
+      "isOnSale": false,
+      "discountPercent": null,
+      "isFeatured": false,
+      "isNewArrival": false,
+      "status": "PUBLISHED",
+      "createdAt": "2026-09-03T19:03:37.999Z",
+      "updatedAt": "2026-09-03T19:03:37.999Z"
+    },
+    {
+      "id": "prod_1788462218000_vbyb",
+      "name": "Cyberboot High Tactical",
+      "slug": "cyberboot-high-tactical-cw-bulk-2-1788462217993",
+      "sku": "CW-BULK-2-1788462217993",
+      "description": "All-weather urban exploration boot",
+      "materials": "Cordura ballistic nylon, Vibram lug",
+      "basePrice": 16999,
+      "salePrice": null,
+      "isOnSale": false,
+      "discountPercent": null,
+      "isFeatured": false,
+      "isNewArrival": false,
+      "status": "PUBLISHED",
+      "createdAt": "2026-09-03T19:03:38.000Z",
+      "updatedAt": "2026-09-03T19:03:38.000Z"
     }
   ],
   "productImages": [
@@ -519,6 +605,34 @@
     {
       "id": "img_prod_1788439658132_qqfz_1788439658132_0",
       "productId": "prod_1788439658132_qqfz",
+      "url": "https://images.unsplash.com/photo-1608231387042-66d1773070a5?auto=format&fit=crop&w=1200&q=80",
+      "altText": "Cyberboot High Tactical view 1",
+      "sortOrder": 0
+    },
+    {
+      "id": "img_prod_1788462217949_2gyz_1788462217949_0",
+      "productId": "prod_1788462217949_2gyz",
+      "url": "https://images.unsplash.com/photo-1552346154-21d32810aba3?auto=format&fit=crop&w=1200&q=80",
+      "altText": "Velocity Phantom X Profile",
+      "sortOrder": 0
+    },
+    {
+      "id": "img_prod_1788462217977_pnys_1788462217977_0",
+      "productId": "prod_1788462217977_pnys",
+      "url": "https://images.unsplash.com/photo-1542291026-7eec264c27ff",
+      "altText": "Secret Prototype Model image 1",
+      "sortOrder": 0
+    },
+    {
+      "id": "img_prod_1788462217999_8zn9_1788462217999_0",
+      "productId": "prod_1788462217999_8zn9",
+      "url": "https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?auto=format&fit=crop&w=1200&q=80",
+      "altText": "Matrix Lowtop Neon view 1",
+      "sortOrder": 0
+    },
+    {
+      "id": "img_prod_1788462218000_vbyb_1788462218000_0",
+      "productId": "prod_1788462218000_vbyb",
       "url": "https://images.unsplash.com/photo-1608231387042-66d1773070a5?auto=format&fit=crop&w=1200&q=80",
       "altText": "Cyberboot High Tactical view 1",
       "sortOrder": 0
@@ -890,6 +1004,66 @@
       "productId": "prod_1788439658132_qqfz",
       "size": "UK 10",
       "stock": 4
+    },
+    {
+      "id": "var_prod_1788462217949_2gyz_1788462217949_0",
+      "productId": "prod_1788462217949_2gyz",
+      "size": "UK 8",
+      "stock": 15
+    },
+    {
+      "id": "var_prod_1788462217949_2gyz_1788462217949_1",
+      "productId": "prod_1788462217949_2gyz",
+      "size": "UK 9",
+      "stock": 19
+    },
+    {
+      "id": "var_prod_1788462217949_2gyz_1788462217949_2",
+      "productId": "prod_1788462217949_2gyz",
+      "size": "UK 10",
+      "stock": 5
+    },
+    {
+      "id": "var_prod_1788462217977_pnys_1788462217977_0",
+      "productId": "prod_1788462217977_pnys",
+      "size": "UK 9",
+      "stock": 5
+    },
+    {
+      "id": "var_prod_1788462217999_8zn9_1788462217999_0",
+      "productId": "prod_1788462217999_8zn9",
+      "size": "UK 7",
+      "stock": 10
+    },
+    {
+      "id": "var_prod_1788462217999_8zn9_1788462217999_1",
+      "productId": "prod_1788462217999_8zn9",
+      "size": "UK 8",
+      "stock": 12
+    },
+    {
+      "id": "var_prod_1788462217999_8zn9_1788462217999_2",
+      "productId": "prod_1788462217999_8zn9",
+      "size": "UK 9",
+      "stock": 8
+    },
+    {
+      "id": "var_prod_1788462218000_vbyb_1788462218000_0",
+      "productId": "prod_1788462218000_vbyb",
+      "size": "UK 8",
+      "stock": 6
+    },
+    {
+      "id": "var_prod_1788462218000_vbyb_1788462218000_1",
+      "productId": "prod_1788462218000_vbyb",
+      "size": "UK 9",
+      "stock": 10
+    },
+    {
+      "id": "var_prod_1788462218000_vbyb_1788462218000_2",
+      "productId": "prod_1788462218000_vbyb",
+      "size": "UK 10",
+      "stock": 4
     }
   ],
   "sections": [
@@ -939,6 +1113,12 @@
       "id": "sec_1788439657980_oriw",
       "name": "Limited Cyber Series",
       "slug": "limited-cyber-1788439657963",
+      "sortOrder": 10
+    },
+    {
+      "id": "sec_1788462217926_5hbc",
+      "name": "Limited Cyber Series",
+      "slug": "limited-cyber-1788462217918",
       "sortOrder": 10
     }
   ],
@@ -1045,6 +1225,18 @@
     },
     {
       "productId": "prod_1788439658132_qqfz",
+      "sectionId": "sec_new_arrivals"
+    },
+    {
+      "productId": "prod_1788462217949_2gyz",
+      "sectionId": "sec_1788462217926_5hbc"
+    },
+    {
+      "productId": "prod_1788462217999_8zn9",
+      "sectionId": "sec_new_arrivals"
+    },
+    {
+      "productId": "prod_1788462218000_vbyb",
       "sectionId": "sec_new_arrivals"
     }
   ],
@@ -1169,6 +1361,54 @@
       "carrier": null,
       "createdAt": "2026-09-03T12:53:13.938Z",
       "updatedAt": "2026-09-03T12:53:13.938Z"
+    },
+    {
+      "id": "ord_1788462218040_vdyuv",
+      "orderNumber": "CW-816146",
+      "profileId": "prof_1788462217779_l5vrg",
+      "shippingAddress": {
+        "firstName": "Alex",
+        "lastName": "Mercer",
+        "email": "customer_1788462217768@callytest.com",
+        "phone": "+91 98765 43210",
+        "address": "Flat 402, Skyline Residency, Bandra West",
+        "city": "Mumbai",
+        "state": "Maharashtra",
+        "pincode": "400050",
+        "country": "India"
+      },
+      "subtotal": 23998,
+      "shippingFee": 0,
+      "total": 23998,
+      "status": "CANCELLED",
+      "trackingNumber": "BLUEDART-IND-9821389",
+      "carrier": "BlueDart Express",
+      "createdAt": "2026-09-03T19:03:38.040Z",
+      "updatedAt": "2026-09-03T19:03:38.147Z"
+    },
+    {
+      "id": "ord_1788462218051_jd1iv",
+      "orderNumber": "CW-764277",
+      "profileId": "prof_1788462217779_l5vrg",
+      "shippingAddress": {
+        "firstName": "Alex",
+        "lastName": "Mercer",
+        "email": "customer_1788462217768@callytest.com",
+        "phone": "+91 98765 43210",
+        "address": "Flat 402, Skyline Residency",
+        "city": "Mumbai",
+        "state": "Maharashtra",
+        "pincode": "400050",
+        "country": "India"
+      },
+      "subtotal": 11999,
+      "shippingFee": 0,
+      "total": 11999,
+      "status": "PLACED",
+      "trackingNumber": null,
+      "carrier": null,
+      "createdAt": "2026-09-03T19:03:38.051Z",
+      "updatedAt": "2026-09-03T19:03:38.051Z"
     }
   ],
   "orderStatusEvents": [
@@ -1259,6 +1499,46 @@
       "note": "Order placed by customer",
       "updatedBy": "system",
       "createdAt": "2026-09-03T12:53:13.938Z"
+    },
+    {
+      "id": "evt_ord_1788462218040_vdyuv_0",
+      "orderId": "ord_1788462218040_vdyuv",
+      "status": "PLACED",
+      "note": "Order placed by customer",
+      "updatedBy": "system",
+      "createdAt": "2026-09-03T19:03:38.040Z"
+    },
+    {
+      "id": "evt_ord_1788462218051_jd1iv_0",
+      "orderId": "ord_1788462218051_jd1iv",
+      "status": "PLACED",
+      "note": "Order placed by customer",
+      "updatedBy": "system",
+      "createdAt": "2026-09-03T19:03:38.051Z"
+    },
+    {
+      "id": "evt_ord_1788462218040_vdyuv_1788462218070",
+      "orderId": "ord_1788462218040_vdyuv",
+      "status": "CONFIRMED",
+      "note": "Inventory reserved and allocated for packaging.",
+      "updatedBy": "profile_admin_root",
+      "createdAt": "2026-09-03T19:03:38.070Z"
+    },
+    {
+      "id": "evt_ord_1788462218040_vdyuv_1788462218086",
+      "orderId": "ord_1788462218040_vdyuv",
+      "status": "SHIPPED",
+      "note": "Dispatched via courier hub.",
+      "updatedBy": "profile_admin_root",
+      "createdAt": "2026-09-03T19:03:38.086Z"
+    },
+    {
+      "id": "evt_ord_1788462218040_vdyuv_1788462218147",
+      "orderId": "ord_1788462218040_vdyuv",
+      "status": "CANCELLED",
+      "note": "Customer requested cancellation prior to flight.",
+      "updatedBy": "profile_admin_root",
+      "createdAt": "2026-09-03T19:03:38.147Z"
     }
   ],
   "orderItems": [
@@ -1299,6 +1579,22 @@
       "orderId": "ord_1788439993938_rwf4k",
       "productId": "prod_1788439386377_l7xf",
       "variantId": "var_prod_1788439386377_l7xf_1788439386377_0",
+      "quantity": 1,
+      "priceAtPurchase": 11999
+    },
+    {
+      "id": "item_ord_1788462218040_vdyuv_0",
+      "orderId": "ord_1788462218040_vdyuv",
+      "productId": "prod_1788462217949_2gyz",
+      "variantId": "var_prod_1788462217949_2gyz_1788462217949_0",
+      "quantity": 2,
+      "priceAtPurchase": 11999
+    },
+    {
+      "id": "item_ord_1788462218051_jd1iv_0",
+      "orderId": "ord_1788462218051_jd1iv",
+      "productId": "prod_1788462217949_2gyz",
+      "variantId": "var_prod_1788462217949_2gyz_1788462217949_1",
       "quantity": 1,
       "priceAtPurchase": 11999
     }
@@ -1348,6 +1644,24 @@
       "amountDue": 11999,
       "amountPaid": 11999,
       "updatedAt": "2026-09-03T12:53:13.938Z"
+    },
+    {
+      "id": "pay_ord_1788462218040_vdyuv",
+      "orderId": "ord_1788462218040_vdyuv",
+      "method": "COD",
+      "status": "PAID",
+      "amountDue": 23998,
+      "amountPaid": 23998,
+      "updatedAt": "2026-09-03T19:03:38.119Z"
+    },
+    {
+      "id": "pay_ord_1788462218051_jd1iv",
+      "orderId": "ord_1788462218051_jd1iv",
+      "method": "PREPAID_MOCK",
+      "status": "PAID",
+      "amountDue": 11999,
+      "amountPaid": 11999,
+      "updatedAt": "2026-09-03T19:03:38.051Z"
     }
   ],
   "paymentLogEvents": [
@@ -1395,6 +1709,59 @@
       "source": "system",
       "note": "Simulated prepaid payment completed successfully",
       "createdAt": "2026-09-03T12:53:13.938Z"
+    },
+    {
+      "id": "paylog_pay_ord_1788462218051_jd1iv_0",
+      "paymentId": "pay_ord_1788462218051_jd1iv",
+      "amount": 11999,
+      "status": "PAID",
+      "source": "system",
+      "note": "Simulated prepaid payment completed successfully",
+      "createdAt": "2026-09-03T19:03:38.051Z"
+    },
+    {
+      "id": "paylog_pay_ord_1788462218040_vdyuv_1788462218119",
+      "paymentId": "pay_ord_1788462218040_vdyuv",
+      "amount": 23998,
+      "status": "PAID",
+      "source": "profile_admin_root",
+      "note": "Cash collected at customer doorstep by delivery agent.",
+      "createdAt": "2026-09-03T19:03:38.119Z"
+    }
+  ],
+  "scrollShowcaseItems": [
+    {
+      "id": "showcase_01",
+      "productId": "prod_01",
+      "displayOrder": 0,
+      "isActive": true,
+      "overrideImageUrl": null,
+      "highlightLabel": "TACTICAL BALLISTIC CAGE",
+      "highlightDescription": "Constructed with ripstop ballistic nylon and molded TPU sidewall reinforcements for maximum lateral containment during intense urban sprint maneuvers.",
+      "createdAt": "2026-09-03T19:02:57.952Z",
+      "updatedAt": "2026-09-03T19:02:57.952Z"
+    },
+    {
+      "id": "showcase_02",
+      "productId": "prod_01",
+      "displayOrder": 1,
+      "isActive": true,
+      "overrideImageUrl": null,
+      "highlightLabel": "NITROGEN-INJECTED FOAM",
+      "highlightDescription": "Supercritical cellular nitrogen foam core delivers explosive 78% energy rebound while attenuating harsh ground impact over relentless concrete.",
+      "createdAt": "2026-09-03T19:02:57.952Z",
+      "updatedAt": "2026-09-03T19:02:57.952Z"
+    },
+    {
+      "id": "showcase_03",
+      "productId": "prod_01",
+      "displayOrder": 2,
+      "isActive": true,
+      "overrideImageUrl": null,
+      "highlightLabel": "VIBRAM COMMANDO GRIP",
+      "highlightDescription": "Multi-directional chevron siping and high-abrasion Megagrip compound engineered for uncompromised wet-surface traction and instantaneous stopping power.",
+      "createdAt": "2026-09-03T19:02:57.952Z",
+      "updatedAt": "2026-09-03T19:02:57.952Z"
     }
   ]
 }

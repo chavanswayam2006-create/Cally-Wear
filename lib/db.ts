@@ -172,6 +172,18 @@ export interface PaymentLogEventRecord {
   createdAt: string;
 }
 
+export interface ScrollShowcaseItemRecord {
+  id: string;
+  productId: string;
+  displayOrder: number;
+  isActive: boolean;
+  overrideImageUrl: string | null;
+  highlightLabel: string;
+  highlightDescription: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
 interface LocalDatabaseState {
   profiles: ProfileRecord[];
   addresses: AddressRecord[];
@@ -180,6 +192,7 @@ interface LocalDatabaseState {
   productVariants: ProductVariantRecord[];
   sections: SectionRecord[];
   productSections: ProductSectionRecord[];
+  scrollShowcaseItems: ScrollShowcaseItemRecord[];
   orders: OrderRecord[];
   orderStatusEvents: OrderStatusEventRecord[];
   orderItems: OrderItemRecord[];
@@ -407,6 +420,41 @@ function getInitialSeedData(): LocalDatabaseState {
     productVariants,
     sections,
     productSections,
+    scrollShowcaseItems: [
+      {
+        id: "showcase_01",
+        productId: "prod_01",
+        displayOrder: 0,
+        isActive: true,
+        overrideImageUrl: null,
+        highlightLabel: "TACTICAL BALLISTIC CAGE",
+        highlightDescription: "Constructed with ripstop ballistic nylon and molded TPU sidewall reinforcements for maximum lateral containment during intense urban sprint maneuvers.",
+        createdAt: now,
+        updatedAt: now,
+      },
+      {
+        id: "showcase_02",
+        productId: "prod_01",
+        displayOrder: 1,
+        isActive: true,
+        overrideImageUrl: null,
+        highlightLabel: "NITROGEN-INJECTED FOAM",
+        highlightDescription: "Supercritical cellular nitrogen foam core delivers explosive 78% energy rebound while attenuating harsh ground impact over relentless concrete.",
+        createdAt: now,
+        updatedAt: now,
+      },
+      {
+        id: "showcase_03",
+        productId: "prod_01",
+        displayOrder: 2,
+        isActive: true,
+        overrideImageUrl: null,
+        highlightLabel: "VIBRAM COMMANDO GRIP",
+        highlightDescription: "Multi-directional chevron siping and high-abrasion Megagrip compound engineered for uncompromised wet-surface traction and instantaneous stopping power.",
+        createdAt: now,
+        updatedAt: now,
+      },
+    ],
     orders: [],
     orderStatusEvents: [],
     orderItems: [],
@@ -428,6 +476,9 @@ class LocalStoreManager {
         const raw = fs.readFileSync(DB_FILE, "utf-8");
         this.state = JSON.parse(raw);
         if (this.state && Array.isArray(this.state.products)) {
+          if (!Array.isArray(this.state.scrollShowcaseItems)) {
+            this.state.scrollShowcaseItems = getInitialSeedData().scrollShowcaseItems;
+          }
           return this.state;
         }
       } catch (err) {
@@ -1298,6 +1349,141 @@ export const localDb: any = {
       state.addresses = state.addresses.filter((a) => a.id !== args.where.id);
       storeManager.saveState();
       return true;
+    },
+  },
+
+  // Scroll Showcase Items
+  scrollShowcaseItem: {
+    findMany: async (args?: {
+      where?: { isActive?: boolean; productId?: string };
+      orderBy?: { displayOrder?: "asc" | "desc" };
+      include?: { product?: boolean | { include?: any } };
+    }) => {
+      const state = storeManager.getState();
+      let items = [...(state.scrollShowcaseItems || [])];
+
+      if (args?.where) {
+        if (args.where.isActive !== undefined) {
+          items = items.filter((i) => i.isActive === args.where!.isActive);
+        }
+        if (args.where.productId) {
+          items = items.filter((i) => i.productId === args.where!.productId);
+        }
+      }
+
+      if (args?.orderBy?.displayOrder) {
+        const dir = args.orderBy.displayOrder === "desc" ? -1 : 1;
+        items.sort((a, b) => (a.displayOrder - b.displayOrder) * dir);
+      } else {
+        items.sort((a, b) => a.displayOrder - b.displayOrder);
+      }
+
+      if (args?.include?.product) {
+        return items.map((item) => {
+          const prod = state.products.find((p) => p.id === item.productId);
+          const images = prod ? state.productImages.filter((img) => img.productId === prod.id) : [];
+          return {
+            ...item,
+            product: prod ? { ...prod, images } : null,
+          };
+        });
+      }
+
+      return items;
+    },
+
+    findUnique: async (args: { where: { id: string }; include?: { product?: boolean } }) => {
+      const state = storeManager.getState();
+      const item = (state.scrollShowcaseItems || []).find((i) => i.id === args.where.id);
+      if (!item) return null;
+
+      if (args.include?.product) {
+        const prod = state.products.find((p) => p.id === item.productId);
+        const images = prod ? state.productImages.filter((img) => img.productId === prod.id) : [];
+        return {
+          ...item,
+          product: prod ? { ...prod, images } : null,
+        };
+      }
+      return item;
+    },
+
+    create: async (args: {
+      data: {
+        productId: string;
+        displayOrder?: number;
+        isActive?: boolean;
+        overrideImageUrl?: string | null;
+        highlightLabel: string;
+        highlightDescription: string;
+      };
+      include?: { product?: boolean };
+    }) => {
+      const state = storeManager.getState();
+      if (!state.scrollShowcaseItems) state.scrollShowcaseItems = [];
+      const id = `showcase_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`;
+      const now = new Date().toISOString();
+
+      const newItem: ScrollShowcaseItemRecord = {
+        id,
+        productId: args.data.productId,
+        displayOrder: args.data.displayOrder ?? state.scrollShowcaseItems.length,
+        isActive: args.data.isActive ?? true,
+        overrideImageUrl: args.data.overrideImageUrl || null,
+        highlightLabel: args.data.highlightLabel,
+        highlightDescription: args.data.highlightDescription,
+        createdAt: now,
+        updatedAt: now,
+      };
+
+      state.scrollShowcaseItems.push(newItem);
+      storeManager.saveState();
+
+      if (args.include?.product) {
+        const prod = state.products.find((p) => p.id === newItem.productId);
+        const images = prod ? state.productImages.filter((img) => img.productId === prod.id) : [];
+        return { ...newItem, product: prod ? { ...prod, images } : null };
+      }
+
+      return newItem;
+    },
+
+    update: async (args: {
+      where: { id: string };
+      data: Partial<Omit<ScrollShowcaseItemRecord, "id" | "createdAt" | "updatedAt">>;
+      include?: { product?: boolean };
+    }) => {
+      const state = storeManager.getState();
+      const item = (state.scrollShowcaseItems || []).find((i) => i.id === args.where.id);
+      if (!item) throw new Error("Showcase item not found");
+
+      Object.assign(item, args.data, { updatedAt: new Date().toISOString() });
+      storeManager.saveState();
+
+      if (args.include?.product) {
+        const prod = state.products.find((p) => p.id === item.productId);
+        const images = prod ? state.productImages.filter((img) => img.productId === prod.id) : [];
+        return { ...item, product: prod ? { ...prod, images } : null };
+      }
+
+      return item;
+    },
+
+    delete: async (args: { where: { id: string } }) => {
+      const state = storeManager.getState();
+      state.scrollShowcaseItems = (state.scrollShowcaseItems || []).filter((i) => i.id !== args.where.id);
+      storeManager.saveState();
+      return true;
+    },
+
+    count: async (args?: { where?: { isActive?: boolean } }) => {
+      const state = storeManager.getState();
+      const items = state.scrollShowcaseItems || [];
+      if (!args?.where) return items.length;
+      return items.filter((i) => {
+        if (args.where?.isActive !== undefined) return i.isActive === args.where.isActive;
+        return true;
+      }).length;
     },
   },
 
