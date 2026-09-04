@@ -232,3 +232,24 @@ model ScrollShowcaseItem {
   @@index([productId])
   @@index([isActive, displayOrder])
 }
+
+model HeroSlide {
+  id                  String   @id @default(cuid())
+  product             Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  productId           String
+  displayOrder        Int      @default(0)
+  isActive            Boolean  @default(true)
+  eyebrowLabel        String   // e.g. "WOMEN'S STREETWEAR ICON"
+  headlineOverride    String?  // optional custom headline; falls back to product.name
+  descriptionOverride String?  // optional; falls back to product.shortDescription
+  ctaPrimaryLabel     String   // e.g. "Shop Strata"
+  ctaSecondaryLabel   String?  // e.g. "Women's Collection"
+  ctaSecondaryLink    String?  // if omitted, secondary button hides
+  ctaPrimaryLink      String?  // optional custom primary link; falls back to /products/{product.slug}
+  cutoutImageUrl      String?  // optional dedicated large cutout render; falls back to product's primary image
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+
+  @@index([productId])
+  @@index([isActive, displayOrder])
+}
