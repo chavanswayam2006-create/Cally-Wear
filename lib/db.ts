@@ -184,6 +184,23 @@ export interface ScrollShowcaseItemRecord {
   updatedAt: string;
 }
 
+export interface HeroSlideRecord {
+  id: string;
+  productId: string;
+  displayOrder: number;
+  isActive: boolean;
+  eyebrowLabel: string;
+  headlineOverride?: string | null;
+  descriptionOverride?: string | null;
+  ctaPrimaryLabel: string;
+  ctaSecondaryLabel?: string | null;
+  ctaSecondaryLink?: string | null;
+  ctaPrimaryLink?: string | null;
+  cutoutImageUrl?: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
 interface LocalDatabaseState {
   profiles: ProfileRecord[];
   addresses: AddressRecord[];
@@ -193,6 +210,7 @@ interface LocalDatabaseState {
   sections: SectionRecord[];
   productSections: ProductSectionRecord[];
   scrollShowcaseItems: ScrollShowcaseItemRecord[];
+  heroSlides: HeroSlideRecord[];
   orders: OrderRecord[];
   orderStatusEvents: OrderStatusEventRecord[];
   orderItems: OrderItemRecord[];
@@ -455,6 +473,56 @@ function getInitialSeedData(): LocalDatabaseState {
         updatedAt: now,
       },
     ],
+    heroSlides: [
+      {
+        id: "hero_01",
+        productId: "prod_01",
+        displayOrder: 0,
+        isActive: true,
+        eyebrowLabel: "DROP 04 / EXCLUSIVE LAUNCH",
+        headlineOverride: "CALLY APEX TECH RUNNER",
+        descriptionOverride: "Engineered for high-octane asphalt agility. Responsive nitrogen-injected cushioning meets tactical ripstop architecture.",
+        ctaPrimaryLabel: "EXPLORE THE DROP",
+        ctaPrimaryLink: "/products/apex-tech-runner",
+        ctaSecondaryLabel: "SHOP MEN'S KICKS",
+        ctaSecondaryLink: "/shop/men",
+        cutoutImageUrl: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=1200&q=80",
+        createdAt: now,
+        updatedAt: now,
+      },
+      {
+        id: "hero_02",
+        productId: "prod_02",
+        displayOrder: 1,
+        isActive: true,
+        eyebrowLabel: "LIMITED EDITORIAL COLLECTION",
+        headlineOverride: "THE MONOCHROME VAULT",
+        descriptionOverride: "Stripped of color distractions. Shadow and light engineered with heavy tumbled Italian leathers and obsidian carbon accents.",
+        ctaPrimaryLabel: "VIEW VAULT LOOKBOOK",
+        ctaPrimaryLink: "/collections/monochrome-vault",
+        ctaSecondaryLabel: "ALL SNEAKERS",
+        ctaSecondaryLink: "/shop",
+        cutoutImageUrl: "https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?auto=format&fit=crop&w=1200&q=80",
+        createdAt: now,
+        updatedAt: now,
+      },
+      {
+        id: "hero_03",
+        productId: "prod_03",
+        displayOrder: 2,
+        isActive: true,
+        eyebrowLabel: "WOMEN'S STREETWEAR ICON",
+        headlineOverride: "STRATA CHUNKY PLATFORM",
+        descriptionOverride: "52mm sculpted elevation. Featherlight composite geometry crafted to elevate your daily street stance with zero fatigue.",
+        ctaPrimaryLabel: "SHOP STRATA",
+        ctaPrimaryLink: "/products/veloce-speed-trainer",
+        ctaSecondaryLabel: "WOMEN'S COLLECTION",
+        ctaSecondaryLink: "/shop/women",
+        cutoutImageUrl: "https://images.unsplash.com/photo-1584735935682-2f2b69dff9d2?auto=format&fit=crop&w=1200&q=80",
+        createdAt: now,
+        updatedAt: now,
+      },
+    ],
     orders: [],
     orderStatusEvents: [],
     orderItems: [],
@@ -476,8 +544,17 @@ class LocalStoreManager {
         const raw = fs.readFileSync(DB_FILE, "utf-8");
         this.state = JSON.parse(raw);
         if (this.state && Array.isArray(this.state.products)) {
+          let needsSave = false;
           if (!Array.isArray(this.state.scrollShowcaseItems)) {
             this.state.scrollShowcaseItems = getInitialSeedData().scrollShowcaseItems;
+            needsSave = true;
+          }
+          if (!Array.isArray(this.state.heroSlides)) {
+            this.state.heroSlides = getInitialSeedData().heroSlides;
+            needsSave = true;
+          }
+          if (needsSave) {
+            this.saveState();
           }
           return this.state;
         }
@@ -504,7 +581,9 @@ class LocalStoreManager {
   }
 }
 
-const storeManager = new LocalStoreManager();
+const globalForStore = globalThis as unknown as { storeManager?: LocalStoreManager };
+export const storeManager = globalForStore.storeManager || new LocalStoreManager();
+if (process.env.NODE_ENV !== "production") globalForStore.storeManager = storeManager;
 
 // Helper to determine if we should use live PostgreSQL or local fallback
 export function shouldUsePostgres(): boolean {
@@ -1482,6 +1561,151 @@ export const localDb: any = {
       if (!args?.where) return items.length;
       return items.filter((i) => {
         if (args.where?.isActive !== undefined) return i.isActive === args.where.isActive;
+        return true;
+      }).length;
+    },
+  },
+
+  // Hero Slide Items (for Cinematic Hero Showcase)
+  heroSlide: {
+    findMany: async (args?: {
+      where?: { isActive?: boolean; productId?: string };
+      orderBy?: { displayOrder?: "asc" | "desc" };
+      include?: { product?: boolean | { include?: any } };
+    }) => {
+      const state = storeManager.getState();
+      let slides = [...(state.heroSlides || [])];
+
+      if (args?.where) {
+        if (args.where.isActive !== undefined) {
+          slides = slides.filter((s) => s.isActive === args.where!.isActive);
+        }
+        if (args.where.productId) {
+          slides = slides.filter((s) => s.productId === args.where!.productId);
+        }
+      }
+
+      if (args?.orderBy?.displayOrder) {
+        const dir = args.orderBy.displayOrder === "desc" ? -1 : 1;
+        slides.sort((a, b) => (a.displayOrder - b.displayOrder) * dir);
+      } else {
+        slides.sort((a, b) => a.displayOrder - b.displayOrder);
+      }
+
+      if (args?.include?.product) {
+        return slides.map((slide) => {
+          const prod = state.products.find((p) => p.id === slide.productId);
+          const images = prod ? state.productImages.filter((img) => img.productId === prod.id) : [];
+          return {
+            ...slide,
+            product: prod ? { ...prod, images } : null,
+          };
+        });
+      }
+
+      return slides;
+    },
+
+    findUnique: async (args: { where: { id: string }; include?: { product?: boolean } }) => {
+      const state = storeManager.getState();
+      const slide = (state.heroSlides || []).find((s) => s.id === args.where.id);
+      if (!slide) return null;
+
+      if (args.include?.product) {
+        const prod = state.products.find((p) => p.id === slide.productId);
+        const images = prod ? state.productImages.filter((img) => img.productId === prod.id) : [];
+        return {
+          ...slide,
+          product: prod ? { ...prod, images } : null,
+        };
+      }
+      return slide;
+    },
+
+    create: async (args: {
+      data: {
+        productId: string;
+        displayOrder?: number;
+        isActive?: boolean;
+        eyebrowLabel: string;
+        headlineOverride?: string | null;
+        descriptionOverride?: string | null;
+        ctaPrimaryLabel: string;
+        ctaSecondaryLabel?: string | null;
+        ctaSecondaryLink?: string | null;
+        ctaPrimaryLink?: string | null;
+        cutoutImageUrl?: string | null;
+      };
+      include?: { product?: boolean };
+    }) => {
+      const state = storeManager.getState();
+      if (!state.heroSlides) state.heroSlides = [];
+      const id = `hero_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`;
+      const now = new Date().toISOString();
+
+      const newSlide: HeroSlideRecord = {
+        id,
+        productId: args.data.productId,
+        displayOrder: args.data.displayOrder ?? state.heroSlides.length,
+        isActive: args.data.isActive ?? true,
+        eyebrowLabel: args.data.eyebrowLabel,
+        headlineOverride: args.data.headlineOverride || null,
+        descriptionOverride: args.data.descriptionOverride || null,
+        ctaPrimaryLabel: args.data.ctaPrimaryLabel,
+        ctaSecondaryLabel: args.data.ctaSecondaryLabel || null,
+        ctaSecondaryLink: args.data.ctaSecondaryLink || null,
+        ctaPrimaryLink: args.data.ctaPrimaryLink || null,
+        cutoutImageUrl: args.data.cutoutImageUrl || null,
+        createdAt: now,
+        updatedAt: now,
+      };
+
+      state.heroSlides.push(newSlide);
+      storeManager.saveState();
+
+      if (args.include?.product) {
+        const prod = state.products.find((p) => p.id === newSlide.productId);
+        const images = prod ? state.productImages.filter((img) => img.productId === prod.id) : [];
+        return { ...newSlide, product: prod ? { ...prod, images } : null };
+      }
+
+      return newSlide;
+    },
+
+    update: async (args: {
+      where: { id: string };
+      data: Partial<Omit<HeroSlideRecord, "id" | "createdAt" | "updatedAt">>;
+      include?: { product?: boolean };
+    }) => {
+      const state = storeManager.getState();
+      const slide = (state.heroSlides || []).find((s) => s.id === args.where.id);
+      if (!slide) throw new Error("Hero slide not found");
+
+      Object.assign(slide, args.data, { updatedAt: new Date().toISOString() });
+      storeManager.saveState();
+
+      if (args.include?.product) {
+        const prod = state.products.find((p) => p.id === slide.productId);
+        const images = prod ? state.productImages.filter((img) => img.productId === prod.id) : [];
+        return { ...slide, product: prod ? { ...prod, images } : null };
+      }
+
+      return slide;
+    },
+
+    delete: async (args: { where: { id: string } }) => {
+      const state = storeManager.getState();
+      state.heroSlides = (state.heroSlides || []).filter((s) => s.id !== args.where.id);
+      storeManager.saveState();
+      return true;
+    },
+
+    count: async (args?: { where?: { isActive?: boolean } }) => {
+      const state = storeManager.getState();
+      const slides = state.heroSlides || [];
+      if (!args?.where) return slides.length;
+      return slides.filter((s) => {
+        if (args.where?.isActive !== undefined) return s.isActive === args.where.isActive;
         return true;
       }).length;
     },

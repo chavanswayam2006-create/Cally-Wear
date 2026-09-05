@@ -64,6 +64,7 @@ model Product {
   sections        ProductSection[]
   orderItems      OrderItem[]
   scrollShowcaseItems ScrollShowcaseItem[]
+  heroSlides      HeroSlide[]
   createdAt       DateTime         @default(now())
   updatedAt       DateTime         @updatedAt
 

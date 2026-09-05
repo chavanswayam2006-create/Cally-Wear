@@ -1763,5 +1763,55 @@
       "createdAt": "2026-09-03T19:02:57.952Z",
       "updatedAt": "2026-09-03T19:02:57.952Z"
     }
+  ],
+  "heroSlides": [
+    {
+      "id": "hero_01",
+      "productId": "prod_01",
+      "displayOrder": 0,
+      "isActive": true,
+      "eyebrowLabel": "DROP 04 / EXCLUSIVE LAUNCH",
+      "headlineOverride": "CALLY APEX TECH RUNNER",
+      "descriptionOverride": "Engineered for high-octane asphalt agility. Responsive nitrogen-injected cushioning meets tactical ripstop architecture.",
+      "ctaPrimaryLabel": "EXPLORE THE DROP",
+      "ctaPrimaryLink": "/products/apex-tech-runner",
+      "ctaSecondaryLabel": "SHOP MEN'S KICKS",
+      "ctaSecondaryLink": "/shop/men",
+      "cutoutImageUrl": "https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=1200&q=80",
+      "createdAt": "2026-09-04T19:47:52.230Z",
+      "updatedAt": "2026-09-04T20:06:10.373Z"
+    },
+    {
+      "id": "hero_02",
+      "productId": "prod_02",
+      "displayOrder": 1,
+      "isActive": true,
+      "eyebrowLabel": "LIMITED EDITORIAL COLLECTION",
+      "headlineOverride": "THE MONOCHROME VAULT",
+      "descriptionOverride": "Stripped of color distractions. Shadow and light engineered with heavy tumbled Italian leathers and obsidian carbon accents.",
+      "ctaPrimaryLabel": "VIEW VAULT LOOKBOOK",
+      "ctaPrimaryLink": "/collections/monochrome-vault",
+      "ctaSecondaryLabel": "ALL SNEAKERS",
+      "ctaSecondaryLink": "/shop",
+      "cutoutImageUrl": "https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?auto=format&fit=crop&w=1200&q=80",
+      "createdAt": "2026-09-04T19:47:52.230Z",
+      "updatedAt": "2026-09-04T20:06:10.611Z"
+    },
+    {
+      "id": "hero_03",
+      "productId": "prod_03",
+      "displayOrder": 2,
+      "isActive": true,
+      "eyebrowLabel": "WOMEN'S STREETWEAR ICON",
+      "headlineOverride": "STRATA CHUNKY PLATFORM",
+      "descriptionOverride": "52mm sculpted elevation. Featherlight composite geometry crafted to elevate your daily street stance with zero fatigue.",
+      "ctaPrimaryLabel": "SHOP STRATA",
+      "ctaPrimaryLink": "/products/veloce-speed-trainer",
+      "ctaSecondaryLabel": "WOMEN'S COLLECTION",
+      "ctaSecondaryLink": "/shop/women",
+      "cutoutImageUrl": "https://images.unsplash.com/photo-1584735935682-2f2b69dff9d2?auto=format&fit=crop&w=1200&q=80",
+      "createdAt": "2026-09-04T19:47:52.230Z",
+      "updatedAt": "2026-09-04T20:06:10.802Z"
+    }
   ]
 }
