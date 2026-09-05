@@ -141,8 +141,6 @@ jobs:
           done
           # Run the comprehensive backend loop test (covers Section 11 checklist)
           node scripts/test-full-backend-loop.mjs
-          # Run the new Scroll Showcase & Admin Manager verification suite
-          node scripts/test-scroll-showcase.mjs
           # Gracefully terminate background server
           kill $SERVER_PID 2>/dev/null || true
 

@@ -37,6 +37,15 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  async redirects() {
+    return [
+      {
+        source: "/admin/scroll-showcase",
+        destination: "/admin/hero-showcase",
+        permanent: false,
+      },
+    ];
+  },
   async headers() {
     return [
       {
