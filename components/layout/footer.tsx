@@ -151,12 +151,12 @@ export function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/shipping-returns" className="hover:text-white transition-colors">
+                <Link href="/shipping" className="hover:text-white transition-colors">
                   Shipping & Delivery
                 </Link>
               </li>
               <li>
-                <Link href="/shipping-returns" className="hover:text-white transition-colors">
+                <Link href="/returns" className="hover:text-white transition-colors">
                   Returns & Exchanges
                 </Link>
               </li>

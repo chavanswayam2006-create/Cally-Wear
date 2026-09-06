@@ -1,16 +1,18 @@
 import React from "react";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { products, getProductBySlug, getRelatedProducts } from "@/lib/data/products";
+import { getProductBySlug } from "@/lib/data/products";
 import { ProductDetailView } from "@/components/product/product-detail-view";
+import { ProductCategory } from "@/lib/types/product";
 
 interface Props {
   params: Promise<{ slug: string }>;
 }
 
 export async function generateStaticParams() {
-  const list = Array.isArray(products) ? products : [];
-  return list
+  // Fetch all product slugs from the canonical data layer at build time
+  const products = await getAllProducts();
+  return products
     .filter((product) => Boolean(product && typeof product.slug === "string" && product.slug.trim()))
     .map((product) => ({
       slug: product.slug,
@@ -25,7 +27,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     };
   }
   const slug = resolved.slug;
-  const product = getProductBySlug(slug);
+  const product = await getProductBySlug(slug);
 
   if (!product) {
     return {
@@ -60,13 +62,13 @@ export default async function ProductPage({ params }: Props) {
     notFound();
   }
   const slug = resolved.slug;
-  const product = getProductBySlug(slug);
+  const product = await getProductBySlug(slug);
 
   if (!product) {
     notFound();
   }
 
-  const relatedProducts = getRelatedProducts(product.id, 4);
+  const relatedProducts = await getRelatedProducts(product.id, 4);
 
   return (
     <ProductDetailView product={product} relatedProducts={relatedProducts} />

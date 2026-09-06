@@ -1,4 +1,6 @@
-export type ProductCategory = "men" | "women" | "unisex";
+export type ProductCategory = "SNEAKERS" | "SLIDES" | "BOOTS" | "SANDALS" | "RUNNING" | "STREETWEAR";
+
+export type ProductGender = "MEN" | "WOMEN" | "UNISEX";
 
 export type ProductColor = {
   name: string;
@@ -11,7 +13,7 @@ export type Product = {
   slug: string;
   name: string;
   category: ProductCategory;
-  subCategory: string; // "sneakers" | "running" | "slides" | "basketball" | "streetwear" | "retro"
+  gender: ProductGender;
   price: number;
   compareAtPrice?: number;
   images: string[];
@@ -28,6 +30,7 @@ export type Product = {
   details?: string[];
 };
 
+// Cart item type — keyed by product id + size + color for deduplication
 export type CartItem = {
   id: string; // composite key: `${productId}-${size}-${color}`
   productId: string;
@@ -42,17 +45,7 @@ export type CartItem = {
   stock: number;
 };
 
-export type Collection = {
-  id: string;
-  slug: string;
-  title: string;
-  subtitle: string;
-  description: string;
-  bannerImage: string;
-  featuredProductIds: string[];
-  tags: string[];
-};
-
+// Order shipping address
 export type OrderShippingAddress = {
   firstName: string;
   lastName: string;
@@ -66,6 +59,7 @@ export type OrderShippingAddress = {
   country: string;
 };
 
+// Order type
 export type Order = {
   id: string;
   orderNumber: string;
@@ -77,7 +71,6 @@ export type Order = {
     | "confirmed"
     | "packed"
     | "in_transit"
-    | "processing"
     | "shipped"
     | "delivered"
     | "cancelled"
@@ -95,8 +88,10 @@ export type Order = {
   estimatedDelivery?: string;
 };
 
+// Filter state — all filters query against enum values
 export type FilterState = {
   category?: ProductCategory | "all";
+  gender?: ProductGender;
   subCategory?: string[];
   sizes?: string[];
   colors?: string[];

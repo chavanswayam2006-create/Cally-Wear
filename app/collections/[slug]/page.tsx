@@ -3,8 +3,7 @@ import { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { collections, getCollectionBySlug } from "@/lib/data/collections";
-import { products } from "@/lib/data/products";
+import { getCollectionBySlug, getProductsByCollection } from "@/lib/data/collections";
 import { ProductCard } from "@/components/product/product-card";
 import { ArrowLeft, Sparkles, ShieldCheck } from "lucide-react";
 
@@ -14,7 +13,7 @@ interface Props {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const collection = getCollectionBySlug(slug);
+  const collection = await getCollectionBySlug(slug);
 
   if (!collection) {
     return { title: "Collection Not Found" };
@@ -22,24 +21,20 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   return {
     title: `${collection.title} — Editorial Collection`,
-    description: collection.description,
+    description: collection.subtitle,
   };
 }
 
 export default async function CollectionPage({ params }: Props) {
   const { slug } = await params;
-  const collection = getCollectionBySlug(slug);
+  const collection = await getCollectionBySlug(slug);
 
   if (!collection) {
     notFound();
   }
 
-  // Filter products by collection featured IDs or matching category tags
-  const collectionProducts = products.filter(
-    (p) =>
-      collection.featuredProductIds.includes(p.id) ||
-      p.tags?.some((t) => collection.tags.includes(t))
-  );
+  // Fetch products linked to this collection via the relational join table
+  const linkedProducts = await getProductsByCollection(slug);
 
   return (
     <div className="min-h-screen bg-[#FAF8F5]">
@@ -82,10 +77,10 @@ export default async function CollectionPage({ params }: Props) {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
         <div className="flex items-center justify-between pb-6 border-b border-[#E4DFD5] mb-8">
           <span className="text-xs font-black uppercase tracking-wider text-[#6B665F]">
-            Showing {collectionProducts.length} Silhouettes in this Vault
+            Showing {linkedProducts.length} Silhouettes in this Vault
           </span>
           <div className="flex items-center gap-2">
-            {collection.tags.map((tag) => (
+            {collection.tags.map((tag: string) => (
               <span
                 key={tag}
                 className="text-[10px] bg-[#12110E] text-white px-2 py-0.5 font-black uppercase tracking-wider"
@@ -97,8 +92,8 @@ export default async function CollectionPage({ params }: Props) {
         </div>
 
         <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
-          {collectionProducts.map((product) => (
-            <ProductCard key={product.id} product={product} />
+          {linkedProducts.map((item) => (
+            <ProductCard key={item.product.id} product={item.product} />
           ))}
         </div>
       </div>

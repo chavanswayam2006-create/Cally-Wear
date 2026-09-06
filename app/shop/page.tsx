@@ -1,7 +1,8 @@
 import React, { Suspense } from "react";
 import { Metadata } from "next";
 import { ShopView } from "@/components/shop/shop-view";
-import { products } from "@/lib/data/products";
+import { products, getAllProducts, getProductsByCategory, getFeaturedProducts, getNewArrivals } from "@/lib/data/products";
+import { ProductCategory } from "@/lib/types/product";
 
 export const metadata: Metadata = {
   title: "Shop All Sneakers & Footwear",
@@ -44,10 +45,42 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
   const initialQuery = typeof params.q === "string" ? params.q : "";
   const initialCategory = typeof params.category === "string" ? params.category : "";
 
+  // Fetch products from the canonical Prisma data layer
+  let initialProducts: any[] = [];
+
+  if (initialCategory) {
+    initialProducts = await getProductsByCategory(initialCategory as ProductCategory);
+  } else {
+    initialProducts = await getAllProducts();
+  }
+
+  // Apply sort/filter logic
+  let processedProducts = [...initialProducts];
+
+  if (initialSort === "price-asc") {
+    processedProducts.sort((a, b) => a.price - b.price);
+  } else if (initialSort === "price-desc") {
+    processedProducts.sort((a, b) => b.price - a.price);
+  } else if (initialSort === "newest") {
+    processedProducts.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+  } else {
+    // default: featured first
+    processedProducts.sort((a, b) => (b.isFeatured ? 1 : 0) - (a.isFeatured ? 1 : 0));
+  }
+
+  // Apply query filter
+  if (initialQuery) {
+    processedProducts = processedProducts.filter(
+      (p) =>
+        p.name.toLowerCase().includes(initialQuery.toLowerCase()) ||
+        p.sku.toLowerCase().includes(initialQuery.toLowerCase())
+    );
+  }
+
   return (
     <Suspense fallback={<CatalogSkeleton />}>
       <ShopView
-        initialProducts={products}
+        initialProducts={processedProducts}
         title={isSale ? "Archive Sale & Markdown Drops" : "All Footwear & Drops"}
         initialSale={isSale}
         initialSort={initialSort}

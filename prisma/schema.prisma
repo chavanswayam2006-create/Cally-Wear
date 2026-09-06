@@ -50,14 +50,17 @@ model Product {
   name            String
   slug            String           @unique
   sku             String           @unique
+  category        Category         // canonical enum for filter taxonomy
+  gender          Gender           // MEN | WOMEN | UNISEX
   description     String
-  materials       String
+  materials       String?
   basePrice       Decimal
   salePrice       Decimal?
   isOnSale        Boolean          @default(false)
   discountPercent Int?             // derived/stored for display convenience
   isFeatured      Boolean          @default(false)
   isNewArrival    Boolean          @default(false)
+  isActive        Boolean          @default(true) // inactive products excluded from storefront listings
   status          ProductStatus    @default(DRAFT) // DRAFT products never show on storefront
   images          ProductImage[]
   variants        ProductVariant[]
@@ -70,12 +73,30 @@ model Product {
 
   @@index([status])
   @@index([isOnSale])
+  @@index([category])
+  @@index([gender])
+  @@index([isActive])
 }
 
 enum ProductStatus {
   DRAFT
   PUBLISHED
   ARCHIVED
+}
+
+enum Category {
+  SNEAKERS
+  SLIDES
+  BOOTS
+  SANDALS
+  RUNNING
+  STREETWEAR
+}
+
+enum Gender {
+  MEN
+  WOMEN
+  UNISEX
 }
 
 model ProductImage {
@@ -253,4 +274,30 @@ model HeroSlide {
 
   @@index([productId])
   @@index([isActive, displayOrder])
+}
+
+model Collection {
+  id              String   @id @default(cuid())
+  slug            String   @unique
+  name            String
+  description     String
+  bannerImage     String?
+  isPublished     Boolean  @default(true)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([slug])
+}
+
+model CollectionProduct {
+  id          String @id @default(cuid())
+  product     Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  productId   String
+  collection  Collection @relation(fields: [collectionId], references: [id], onDelete: Cascade)
+  collectionId String
+  sortOrder   Int      @default(0)
+
+  @@id([productId, collectionId])
+  @@index([productId])
+  @@index([collectionId])
 }
