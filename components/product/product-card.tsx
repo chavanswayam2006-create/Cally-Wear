@@ -162,7 +162,7 @@ export function ProductCard({ product, priority = false }: ProductCardProps) {
           {/* Category & Color Swatches */}
           <div className="flex items-center justify-between gap-2 mb-1.5">
             <span className="text-[10px] font-bold uppercase tracking-widest text-[#736F68]">
-              {product.category} • {product.subCategory}
+              {product.category}{product.subCategory ? ` • ${product.subCategory}` : ""}
             </span>
 
             {/* Color preview dots */}

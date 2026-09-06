@@ -4,7 +4,6 @@ import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Search, X, Flame, ArrowRight, TrendingUp, Sparkles } from "lucide-react";
-import { products } from "@/lib/data/products";
 import { Product } from "@/lib/types/product";
 import { formatPrice } from "@/lib/utils";
 
@@ -54,16 +53,22 @@ export function SearchModal({ isOpen, onClose }: SearchModalProps) {
     }
 
     const cleanQuery = query.toLowerCase().trim();
-    const filtered = products.filter((item) => {
-      const matchName = item.name.toLowerCase().includes(cleanQuery);
-      const matchCategory = item.category.toLowerCase().includes(cleanQuery);
-      const matchSub = item.subCategory.toLowerCase().includes(cleanQuery);
-      const matchDesc = item.description.toLowerCase().includes(cleanQuery);
-      const matchTags = item.tags?.some((t) => t.toLowerCase().includes(cleanQuery));
-      return matchName || matchCategory || matchSub || matchDesc || matchTags;
-    });
+    let isCancelled = false;
 
-    setResults(filtered);
+    fetch(`/api/products?q=${encodeURIComponent(cleanQuery)}`)
+      .then((res) => (res.ok ? res.json() : { products: [] }))
+      .then((data) => {
+        if (!isCancelled && Array.isArray(data.products)) {
+          setResults(data.products);
+        }
+      })
+      .catch(() => {
+        if (!isCancelled) setResults([]);
+      });
+
+    return () => {
+      isCancelled = true;
+    };
   }, [query]);
 
   if (!isOpen) return null;
@@ -230,7 +235,7 @@ export function SearchModal({ isOpen, onClose }: SearchModalProps) {
                     </div>
                     <div className="flex-1 min-w-0">
                       <span className="text-[10px] font-bold text-[#E85D2C] uppercase tracking-wider block">
-                        {product.category} • {product.subCategory}
+                        {product.category}{product.subCategory ? ` • ${product.subCategory}` : ""}
                       </span>
                       <h4 className="font-display font-black text-sm uppercase text-[#12110E] truncate group-hover:text-[#E85D2C] transition-colors">
                         {product.name}

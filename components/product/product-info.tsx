@@ -63,7 +63,7 @@ export function ProductInfo({ product, selectedColor, onColorChange }: ProductIn
       <div>
         <div className="flex items-center gap-2 mb-2 flex-wrap">
           <span className="text-[11px] font-black uppercase tracking-widest text-[#E85D2C]">
-            {product.category} • {product.subCategory}
+            {product.category}{product.subCategory ? ` • ${product.subCategory}` : ""}
           </span>
           {product.tags?.map((tag) => (
             <span

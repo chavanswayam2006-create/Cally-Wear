@@ -80,7 +80,7 @@ export default async function CollectionPage({ params }: Props) {
             Showing {linkedProducts.length} Silhouettes in this Vault
           </span>
           <div className="flex items-center gap-2">
-            {collection.tags.map((tag: string) => (
+            {collection.tags?.map((tag: string) => (
               <span
                 key={tag}
                 className="text-[10px] bg-[#12110E] text-white px-2 py-0.5 font-black uppercase tracking-wider"

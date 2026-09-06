@@ -5,6 +5,7 @@ import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 import { db, Role } from "@/lib/db";
 import { supabase, supabaseAdmin, isSupabaseConfigured } from "@/lib/supabase";
+import { getSession, SESSION_COOKIE_NAME } from "@/lib/security/session";
 
 export const AUTH_COOKIE_NAME = "cally_auth_token";
 const JWT_SECRET = process.env.AUTH_SECRET || "cally_wear_jwt_secret_dev_key_2026_super_secure";
@@ -59,7 +60,38 @@ export async function getCurrentUser(req: NextRequest | Request): Promise<AuthUs
     }
   }
 
-  if (!token) return null;
+  // 3. Fallback to Security Session cookie
+  if (!token) {
+    let sessionId: string | null = null;
+    if ("cookies" in req) {
+      sessionId = (req as NextRequest).cookies.get(SESSION_COOKIE_NAME)?.value || null;
+    }
+    if (!sessionId) {
+      const cookieHeader = req.headers.get("cookie");
+      if (cookieHeader) {
+        const match = cookieHeader.match(new RegExp(`(?:^|; )${SESSION_COOKIE_NAME}=([^;]*)`));
+        if (match) sessionId = decodeURIComponent(match[1]);
+      }
+    }
+    if (sessionId) {
+      const session = getSession(sessionId);
+      if (session) {
+        const isPrivileged =
+          session.role === "super_admin" ||
+          session.role === "order_manager" ||
+          session.role === "catalog_manager";
+        const role: Role = isPrivileged ? "ADMIN" : "CUSTOMER";
+        return {
+          id: session.userId,
+          email: session.email,
+          fullName: session.email,
+          role,
+        };
+      }
+    }
+    return null;
+  }
+
 
   // Supabase Auth verification if configured
   if (isSupabaseConfigured && supabase) {

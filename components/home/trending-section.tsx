@@ -16,7 +16,12 @@ export function TrendingSection({ products }: TrendingSectionProps) {
   const filteredProducts = products
     .filter((p) => {
       if (activeTab === "all") return true;
-      return p.category === activeTab || p.category === "unisex";
+      return (
+        (p.gender && p.gender.toLowerCase() === activeTab) ||
+        (p.category && p.category.toLowerCase() === activeTab) ||
+        p.category === "unisex" ||
+        p.gender === "UNISEX"
+      );
     })
     .slice(0, 8);
 

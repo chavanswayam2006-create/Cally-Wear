@@ -38,7 +38,7 @@ export function ProductDetailView({ product, relatedProducts }: ProductDetailVie
             </Link>
             <ChevronRight className="w-3.5 h-3.5 text-[#8C877E]" />
             <Link
-              href={`/shop/${product.category === "unisex" ? "" : product.category}`}
+              href={`/shop/${product.category ? product.category.toLowerCase() : ""}`}
               className="hover:text-black transition-colors uppercase"
             >
               {product.category}

@@ -89,6 +89,15 @@
       "role": "CUSTOMER",
       "passwordHash": "$2b$10$4gVgYcnG22moiIiOj59yGu72W1sZWctgP2RX8m3zWvhqgm8.QhyeC",
       "createdAt": "2026-09-03T19:03:37.847Z"
+    },
+    {
+      "id": "prof_1788696351777_s25r1",
+      "email": "customer_1788696351765@callytest.com",
+      "fullName": "Alex Mercer",
+      "phone": "+91 98765 43210",
+      "role": "CUSTOMER",
+      "passwordHash": "$2b$10$1YNoy9J9qoA7RFWAy9qbt.qW0W2CFmg112Z2wQzCVJNYF9j1e3gjC",
+      "createdAt": "2026-09-06T12:05:51.847Z"
     }
   ],
   "addresses": [],
@@ -466,6 +475,74 @@
       "status": "PUBLISHED",
       "createdAt": "2026-09-03T19:03:38.000Z",
       "updatedAt": "2026-09-03T19:03:38.000Z"
+    },
+    {
+      "id": "prod_1788696351909_u0hy",
+      "name": "Velocity Phantom X",
+      "slug": "velocity-phantom-x-1788696351900",
+      "sku": "CW-TEST-2235",
+      "description": "Next-generation ultra-cushioned technical runner with ballistic ripstop mesh.",
+      "materials": "Full-grain nubuck, recycled TPU cage, Vibram Megagrip outsole",
+      "basePrice": 14999,
+      "salePrice": 11999,
+      "isOnSale": true,
+      "discountPercent": 20,
+      "isFeatured": true,
+      "isNewArrival": true,
+      "status": "PUBLISHED",
+      "createdAt": "2026-09-06T12:05:51.909Z",
+      "updatedAt": "2026-09-06T12:05:51.909Z"
+    },
+    {
+      "id": "prod_1788696351939_zclv",
+      "name": "Secret Prototype Model",
+      "slug": "secret-prototype-1788696351927",
+      "sku": "CW-DRAFT-7066",
+      "description": "Unreleased internal concept",
+      "materials": "Composite mesh",
+      "basePrice": 19999,
+      "salePrice": null,
+      "isOnSale": false,
+      "discountPercent": null,
+      "isFeatured": false,
+      "isNewArrival": false,
+      "status": "DRAFT",
+      "createdAt": "2026-09-06T12:05:51.939Z",
+      "updatedAt": "2026-09-06T12:05:51.939Z"
+    },
+    {
+      "id": "prod_1788696351972_12gp",
+      "name": "Matrix Lowtop Neon",
+      "slug": "matrix-lowtop-neon-cw-bulk-1-1788696351955",
+      "sku": "CW-BULK-1-1788696351955",
+      "description": "Lightweight city commuter sneaker",
+      "materials": "Engineered mesh, recycled foam",
+      "basePrice": 8999,
+      "salePrice": null,
+      "isOnSale": false,
+      "discountPercent": null,
+      "isFeatured": false,
+      "isNewArrival": false,
+      "status": "PUBLISHED",
+      "createdAt": "2026-09-06T12:05:51.972Z",
+      "updatedAt": "2026-09-06T12:05:51.972Z"
+    },
+    {
+      "id": "prod_1788696351974_065j",
+      "name": "Cyberboot High Tactical",
+      "slug": "cyberboot-high-tactical-cw-bulk-2-1788696351955",
+      "sku": "CW-BULK-2-1788696351955",
+      "description": "All-weather urban exploration boot",
+      "materials": "Cordura ballistic nylon, Vibram lug",
+      "basePrice": 16999,
+      "salePrice": null,
+      "isOnSale": false,
+      "discountPercent": null,
+      "isFeatured": false,
+      "isNewArrival": false,
+      "status": "PUBLISHED",
+      "createdAt": "2026-09-06T12:05:51.974Z",
+      "updatedAt": "2026-09-06T12:05:51.974Z"
     }
   ],
   "productImages": [
@@ -633,6 +710,34 @@
     {
       "id": "img_prod_1788462218000_vbyb_1788462218000_0",
       "productId": "prod_1788462218000_vbyb",
+      "url": "https://images.unsplash.com/photo-1608231387042-66d1773070a5?auto=format&fit=crop&w=1200&q=80",
+      "altText": "Cyberboot High Tactical view 1",
+      "sortOrder": 0
+    },
+    {
+      "id": "img_prod_1788696351909_u0hy_1788696351909_0",
+      "productId": "prod_1788696351909_u0hy",
+      "url": "https://images.unsplash.com/photo-1552346154-21d32810aba3?auto=format&fit=crop&w=1200&q=80",
+      "altText": "Velocity Phantom X Profile",
+      "sortOrder": 0
+    },
+    {
+      "id": "img_prod_1788696351939_zclv_1788696351939_0",
+      "productId": "prod_1788696351939_zclv",
+      "url": "https://images.unsplash.com/photo-1542291026-7eec264c27ff",
+      "altText": "Secret Prototype Model image 1",
+      "sortOrder": 0
+    },
+    {
+      "id": "img_prod_1788696351972_12gp_1788696351972_0",
+      "productId": "prod_1788696351972_12gp",
+      "url": "https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?auto=format&fit=crop&w=1200&q=80",
+      "altText": "Matrix Lowtop Neon view 1",
+      "sortOrder": 0
+    },
+    {
+      "id": "img_prod_1788696351974_065j_1788696351974_0",
+      "productId": "prod_1788696351974_065j",
       "url": "https://images.unsplash.com/photo-1608231387042-66d1773070a5?auto=format&fit=crop&w=1200&q=80",
       "altText": "Cyberboot High Tactical view 1",
       "sortOrder": 0
@@ -1064,6 +1169,66 @@
       "productId": "prod_1788462218000_vbyb",
       "size": "UK 10",
       "stock": 4
+    },
+    {
+      "id": "var_prod_1788696351909_u0hy_1788696351909_0",
+      "productId": "prod_1788696351909_u0hy",
+      "size": "UK 8",
+      "stock": 15
+    },
+    {
+      "id": "var_prod_1788696351909_u0hy_1788696351909_1",
+      "productId": "prod_1788696351909_u0hy",
+      "size": "UK 9",
+      "stock": 19
+    },
+    {
+      "id": "var_prod_1788696351909_u0hy_1788696351909_2",
+      "productId": "prod_1788696351909_u0hy",
+      "size": "UK 10",
+      "stock": 5
+    },
+    {
+      "id": "var_prod_1788696351939_zclv_1788696351939_0",
+      "productId": "prod_1788696351939_zclv",
+      "size": "UK 9",
+      "stock": 5
+    },
+    {
+      "id": "var_prod_1788696351972_12gp_1788696351972_0",
+      "productId": "prod_1788696351972_12gp",
+      "size": "UK 7",
+      "stock": 10
+    },
+    {
+      "id": "var_prod_1788696351972_12gp_1788696351972_1",
+      "productId": "prod_1788696351972_12gp",
+      "size": "UK 8",
+      "stock": 12
+    },
+    {
+      "id": "var_prod_1788696351972_12gp_1788696351972_2",
+      "productId": "prod_1788696351972_12gp",
+      "size": "UK 9",
+      "stock": 8
+    },
+    {
+      "id": "var_prod_1788696351974_065j_1788696351974_0",
+      "productId": "prod_1788696351974_065j",
+      "size": "UK 8",
+      "stock": 6
+    },
+    {
+      "id": "var_prod_1788696351974_065j_1788696351974_1",
+      "productId": "prod_1788696351974_065j",
+      "size": "UK 9",
+      "stock": 10
+    },
+    {
+      "id": "var_prod_1788696351974_065j_1788696351974_2",
+      "productId": "prod_1788696351974_065j",
+      "size": "UK 10",
+      "stock": 4
     }
   ],
   "sections": [
@@ -1119,6 +1284,12 @@
       "id": "sec_1788462217926_5hbc",
       "name": "Limited Cyber Series",
       "slug": "limited-cyber-1788462217918",
+      "sortOrder": 10
+    },
+    {
+      "id": "sec_1788696351896_wkb6",
+      "name": "Limited Cyber Series",
+      "slug": "limited-cyber-1788696351878",
       "sortOrder": 10
     }
   ],
@@ -1237,6 +1408,18 @@
     },
     {
       "productId": "prod_1788462218000_vbyb",
+      "sectionId": "sec_new_arrivals"
+    },
+    {
+      "productId": "prod_1788696351909_u0hy",
+      "sectionId": "sec_1788696351896_wkb6"
+    },
+    {
+      "productId": "prod_1788696351972_12gp",
+      "sectionId": "sec_new_arrivals"
+    },
+    {
+      "productId": "prod_1788696351974_065j",
       "sectionId": "sec_new_arrivals"
     }
   ],
@@ -1409,6 +1592,54 @@
       "carrier": null,
       "createdAt": "2026-09-03T19:03:38.051Z",
       "updatedAt": "2026-09-03T19:03:38.051Z"
+    },
+    {
+      "id": "ord_1788696352004_yhloa",
+      "orderNumber": "CW-950681",
+      "profileId": "prof_1788696351777_s25r1",
+      "shippingAddress": {
+        "firstName": "Alex",
+        "lastName": "Mercer",
+        "email": "customer_1788696351765@callytest.com",
+        "phone": "+91 98765 43210",
+        "address": "Flat 402, Skyline Residency, Bandra West",
+        "city": "Mumbai",
+        "state": "Maharashtra",
+        "pincode": "400050",
+        "country": "India"
+      },
+      "subtotal": 23998,
+      "shippingFee": 0,
+      "total": 23998,
+      "status": "CANCELLED",
+      "trackingNumber": "BLUEDART-IND-9821389",
+      "carrier": "BlueDart Express",
+      "createdAt": "2026-09-06T12:05:52.004Z",
+      "updatedAt": "2026-09-06T12:05:52.136Z"
+    },
+    {
+      "id": "ord_1788696352032_3sloc",
+      "orderNumber": "CW-579563",
+      "profileId": "prof_1788696351777_s25r1",
+      "shippingAddress": {
+        "firstName": "Alex",
+        "lastName": "Mercer",
+        "email": "customer_1788696351765@callytest.com",
+        "phone": "+91 98765 43210",
+        "address": "Flat 402, Skyline Residency",
+        "city": "Mumbai",
+        "state": "Maharashtra",
+        "pincode": "400050",
+        "country": "India"
+      },
+      "subtotal": 11999,
+      "shippingFee": 0,
+      "total": 11999,
+      "status": "PLACED",
+      "trackingNumber": null,
+      "carrier": null,
+      "createdAt": "2026-09-06T12:05:52.032Z",
+      "updatedAt": "2026-09-06T12:05:52.032Z"
     }
   ],
   "orderStatusEvents": [
@@ -1539,6 +1770,46 @@
       "note": "Customer requested cancellation prior to flight.",
       "updatedBy": "profile_admin_root",
       "createdAt": "2026-09-03T19:03:38.147Z"
+    },
+    {
+      "id": "evt_ord_1788696352004_yhloa_0",
+      "orderId": "ord_1788696352004_yhloa",
+      "status": "PLACED",
+      "note": "Order placed by customer",
+      "updatedBy": "system",
+      "createdAt": "2026-09-06T12:05:52.004Z"
+    },
+    {
+      "id": "evt_ord_1788696352032_3sloc_0",
+      "orderId": "ord_1788696352032_3sloc",
+      "status": "PLACED",
+      "note": "Order placed by customer",
+      "updatedBy": "system",
+      "createdAt": "2026-09-06T12:05:52.032Z"
+    },
+    {
+      "id": "evt_ord_1788696352004_yhloa_1788696352047",
+      "orderId": "ord_1788696352004_yhloa",
+      "status": "CONFIRMED",
+      "note": "Inventory reserved and allocated for packaging.",
+      "updatedBy": "profile_admin_root",
+      "createdAt": "2026-09-06T12:05:52.047Z"
+    },
+    {
+      "id": "evt_ord_1788696352004_yhloa_1788696352068",
+      "orderId": "ord_1788696352004_yhloa",
+      "status": "SHIPPED",
+      "note": "Dispatched via courier hub.",
+      "updatedBy": "profile_admin_root",
+      "createdAt": "2026-09-06T12:05:52.068Z"
+    },
+    {
+      "id": "evt_ord_1788696352004_yhloa_1788696352136",
+      "orderId": "ord_1788696352004_yhloa",
+      "status": "CANCELLED",
+      "note": "Customer requested cancellation prior to flight.",
+      "updatedBy": "profile_admin_root",
+      "createdAt": "2026-09-06T12:05:52.136Z"
     }
   ],
   "orderItems": [
@@ -1595,6 +1866,22 @@
       "orderId": "ord_1788462218051_jd1iv",
       "productId": "prod_1788462217949_2gyz",
       "variantId": "var_prod_1788462217949_2gyz_1788462217949_1",
+      "quantity": 1,
+      "priceAtPurchase": 11999
+    },
+    {
+      "id": "item_ord_1788696352004_yhloa_0",
+      "orderId": "ord_1788696352004_yhloa",
+      "productId": "prod_1788696351909_u0hy",
+      "variantId": "var_prod_1788696351909_u0hy_1788696351909_0",
+      "quantity": 2,
+      "priceAtPurchase": 11999
+    },
+    {
+      "id": "item_ord_1788696352032_3sloc_0",
+      "orderId": "ord_1788696352032_3sloc",
+      "productId": "prod_1788696351909_u0hy",
+      "variantId": "var_prod_1788696351909_u0hy_1788696351909_1",
       "quantity": 1,
       "priceAtPurchase": 11999
     }
@@ -1662,6 +1949,24 @@
       "amountDue": 11999,
       "amountPaid": 11999,
       "updatedAt": "2026-09-03T19:03:38.051Z"
+    },
+    {
+      "id": "pay_ord_1788696352004_yhloa",
+      "orderId": "ord_1788696352004_yhloa",
+      "method": "COD",
+      "status": "PAID",
+      "amountDue": 23998,
+      "amountPaid": 23998,
+      "updatedAt": "2026-09-06T12:05:52.109Z"
+    },
+    {
+      "id": "pay_ord_1788696352032_3sloc",
+      "orderId": "ord_1788696352032_3sloc",
+      "method": "PREPAID_MOCK",
+      "status": "PAID",
+      "amountDue": 11999,
+      "amountPaid": 11999,
+      "updatedAt": "2026-09-06T12:05:52.032Z"
     }
   ],
   "paymentLogEvents": [
@@ -1727,6 +2032,24 @@
       "source": "profile_admin_root",
       "note": "Cash collected at customer doorstep by delivery agent.",
       "createdAt": "2026-09-03T19:03:38.119Z"
+    },
+    {
+      "id": "paylog_pay_ord_1788696352032_3sloc_0",
+      "paymentId": "pay_ord_1788696352032_3sloc",
+      "amount": 11999,
+      "status": "PAID",
+      "source": "system",
+      "note": "Simulated prepaid payment completed successfully",
+      "createdAt": "2026-09-06T12:05:52.032Z"
+    },
+    {
+      "id": "paylog_pay_ord_1788696352004_yhloa_1788696352109",
+      "paymentId": "pay_ord_1788696352004_yhloa",
+      "amount": 23998,
+      "status": "PAID",
+      "source": "profile_admin_root",
+      "note": "Cash collected at customer doorstep by delivery agent.",
+      "createdAt": "2026-09-06T12:05:52.109Z"
     }
   ],
   "scrollShowcaseItems": [
@@ -1779,7 +2102,7 @@
       "ctaSecondaryLink": "/shop/men",
       "cutoutImageUrl": "https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=1200&q=80",
       "createdAt": "2026-09-04T19:47:52.230Z",
-      "updatedAt": "2026-09-04T20:06:10.373Z"
+      "updatedAt": "2026-09-06T12:00:39.328Z"
     },
     {
       "id": "hero_02",
@@ -1795,7 +2118,7 @@
       "ctaSecondaryLink": "/shop",
       "cutoutImageUrl": "https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?auto=format&fit=crop&w=1200&q=80",
       "createdAt": "2026-09-04T19:47:52.230Z",
-      "updatedAt": "2026-09-04T20:06:10.611Z"
+      "updatedAt": "2026-09-06T12:00:39.346Z"
     },
     {
       "id": "hero_03",
@@ -1811,7 +2134,7 @@
       "ctaSecondaryLink": "/shop/women",
       "cutoutImageUrl": "https://images.unsplash.com/photo-1584735935682-2f2b69dff9d2?auto=format&fit=crop&w=1200&q=80",
       "createdAt": "2026-09-04T19:47:52.230Z",
-      "updatedAt": "2026-09-04T20:06:10.802Z"
+      "updatedAt": "2026-09-06T12:00:39.363Z"
     }
   ]
 }

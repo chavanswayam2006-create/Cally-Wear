@@ -16,7 +16,10 @@ const CSP_HEADER = `
   .replace(/\s{2,}/g, " ")
   .trim();
 
+import path from "path";
+
 const nextConfig: NextConfig = {
+  outputFileTracingRoot: path.join(__dirname),
   eslint: {
     ignoreDuringBuilds: true,
   },

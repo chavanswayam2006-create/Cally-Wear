@@ -10,6 +10,7 @@ interface ShopViewProps {
   initialProducts: Product[];
   title?: string;
   subtitle?: string;
+  productCount?: number;
   defaultCategory?: ProductCategory | "all";
   initialSale?: boolean;
   initialSort?: "featured" | "price-asc" | "price-desc" | "newest" | "discount";
@@ -103,7 +104,7 @@ export function ShopView({
       list = list.filter(
         (p) =>
           p.name.toLowerCase().includes(q) ||
-          p.subCategory.toLowerCase().includes(q) ||
+          (p.subCategory && p.subCategory.toLowerCase().includes(q)) ||
           p.description.toLowerCase().includes(q) ||
           p.tags?.some((t) => t.toLowerCase().includes(q))
       );
@@ -111,12 +112,18 @@ export function ShopView({
 
     // Gender/Category
     if (selectedGender !== "all") {
-      list = list.filter((p) => p.category === selectedGender || p.category === "unisex");
+      list = list.filter(
+        (p) =>
+          (p.gender && p.gender.toLowerCase() === (selectedGender as string).toLowerCase()) ||
+          (p.category && p.category.toLowerCase() === (selectedGender as string).toLowerCase()) ||
+          p.category === "unisex" ||
+          (p.gender as string) === "UNISEX"
+      );
     }
 
     // Subcategories
     if (selectedSubCategories.length > 0) {
-      list = list.filter((p) => selectedSubCategories.includes(p.subCategory));
+      list = list.filter((p) => p.subCategory && selectedSubCategories.includes(p.subCategory));
     }
 
     // Sizes

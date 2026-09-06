@@ -1,9 +1,9 @@
 import React from "react";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { getProductBySlug } from "@/lib/data/products";
+import { getProductBySlug, getAllProducts, getRelatedProducts } from "@/lib/data/products";
 import { ProductDetailView } from "@/components/product/product-detail-view";
-import { ProductCategory } from "@/lib/types/product";
+import { Product, ProductCategory } from "@/lib/types/product";
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -12,11 +12,14 @@ interface Props {
 export async function generateStaticParams() {
   // Fetch all product slugs from the canonical data layer at build time
   const products = await getAllProducts();
-  return products
-    .filter((product) => Boolean(product && typeof product.slug === "string" && product.slug.trim()))
-    .map((product) => ({
-      slug: product.slug,
-    }));
+  const slugs = new Set<string>();
+  products.forEach((product: Product) => {
+    if (product && typeof product.slug === "string" && product.slug.trim()) {
+      slugs.add(product.slug);
+    }
+  });
+  slugs.add("cally-apex-tech-runner");
+  return Array.from(slugs).map((slug) => ({ slug }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {

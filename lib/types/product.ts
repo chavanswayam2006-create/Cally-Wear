@@ -1,4 +1,13 @@
-export type ProductCategory = "SNEAKERS" | "SLIDES" | "BOOTS" | "SANDALS" | "RUNNING" | "STREETWEAR";
+export type ProductCategory =
+  | "SNEAKERS"
+  | "SLIDES"
+  | "BOOTS"
+  | "SANDALS"
+  | "RUNNING"
+  | "STREETWEAR"
+  | "men"
+  | "women"
+  | "unisex";
 
 export type ProductGender = "MEN" | "WOMEN" | "UNISEX";
 
@@ -14,6 +23,7 @@ export type Product = {
   name: string;
   category: ProductCategory;
   gender: ProductGender;
+  subCategory?: string;
   price: number;
   compareAtPrice?: number;
   images: string[];
@@ -28,6 +38,17 @@ export type Product = {
   rating?: number;
   reviewCount?: number;
   details?: string[];
+};
+
+export type Collection = {
+  id: string;
+  slug: string;
+  title: string;
+  subtitle: string;
+  description?: string;
+  bannerImage: string;
+  featuredProductIds?: string[];
+  tags?: string[];
 };
 
 // Cart item type — keyed by product id + size + color for deduplication

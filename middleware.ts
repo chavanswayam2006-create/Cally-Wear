@@ -48,8 +48,15 @@ export function middleware(req: NextRequest) {
   const payload = token ? decodeJwtPayload(token) : null;
   const isAdminOrStaff = payload && (payload.role === "ADMIN" || payload.role === "STAFF");
 
+  const sessionId = req.cookies.get("cally_session_id")?.value || null;
+
   // 3. Admin API Route Protection (/api/admin/*)
   if (pathname.startsWith("/api/admin")) {
+    if (sessionId) {
+      // Allow route-level handler (like /api/admin/audit-logs or /api/admin/orders) to handle security session RBAC
+      return NextResponse.next();
+    }
+
     if (!token || !payload) {
       return NextResponse.json(
         { error: "Unauthorized. Admin authentication required." },

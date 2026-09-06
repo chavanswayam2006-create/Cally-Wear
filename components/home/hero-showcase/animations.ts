@@ -61,7 +61,6 @@ export function useHeroShowcaseAnimation({
     if (typeof window === "undefined" || !containerRef.current) return;
 
     let ctx: any = null;
-    let scrollTriggerInstance: any = null;
 
     Promise.all([
       import("gsap"),
@@ -178,7 +177,6 @@ export function useHeroShowcaseAnimation({
 
     return () => {
       if (ctx) ctx.revert();
-      if (scrollTriggerInstance) scrollTriggerInstance.kill();
     };
   }, [reducedMotion, isMobile, containerRef, textLayerRef, shoeLayerRef]);
 

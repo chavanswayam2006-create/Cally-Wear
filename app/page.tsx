@@ -8,9 +8,9 @@ import { InstagramStrip } from "@/components/home/instagram-strip";
 
 import { getNewArrivals, getBestSellers } from "@/lib/data/products";
 
-export default function HomePage() {
-  const newArrivals = getNewArrivals();
-  const bestSellers = getBestSellers();
+export default async function HomePage() {
+  const newArrivals = await getNewArrivals();
+  const bestSellers = await getBestSellers();
 
   return (
     <div className="flex flex-col min-h-screen">

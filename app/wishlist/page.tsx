@@ -126,7 +126,7 @@ export default function WishlistPage() {
                 <div className="p-4 flex-1 flex flex-col justify-between space-y-4">
                   <div>
                     <span className="text-[10px] font-bold text-[#E85D2C] uppercase tracking-wider block mb-1">
-                      {product.category} • {product.subCategory}
+                      {product.category}{product.subCategory ? ` • ${product.subCategory}` : ""}
                     </span>
                     <Link href={`/products/${product.slug}`}>
                       <h3 className="font-display font-black text-base uppercase text-[#12110E] hover:text-[#E85D2C] transition-colors truncate">
