@@ -129,18 +129,18 @@ export async function POST(req: NextRequest) {
       let pName: string = "Product";
       let pSlug: string = "product";
 
-      if (product) {
+      if (alias) {
+        unitPrice = alias.price;
+        prodId = product ? product.id : item.productId;
+        varId = variant ? variant.id : (product?.variants?.[0]?.id || `var_${item.productId}_1`);
+        pName = alias.name;
+        pSlug = alias.slug;
+      } else if (product) {
         unitPrice = product.isOnSale && product.salePrice ? product.salePrice : product.basePrice;
         prodId = product.id;
         varId = variant ? variant.id : (product.variants?.[0]?.id || `var_${product.id}_1`);
         pName = product.name;
         pSlug = product.slug;
-      } else if (alias) {
-        unitPrice = alias.price;
-        prodId = item.productId;
-        varId = `var_${item.productId}_${item.size || "std"}`;
-        pName = alias.name;
-        pSlug = alias.slug;
       } else {
         return NextResponse.json({ error: `Product not found: ${item.productId}` }, { status: 400 });
       }

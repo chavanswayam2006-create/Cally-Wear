@@ -760,7 +760,7 @@
       "id": "var_prod_01_2",
       "productId": "prod_01",
       "size": "UK 9",
-      "stock": 18
+      "stock": 4
     },
     {
       "id": "var_prod_01_3",
@@ -1640,6 +1640,174 @@
       "carrier": null,
       "createdAt": "2026-09-06T12:05:52.032Z",
       "updatedAt": "2026-09-06T12:05:52.032Z"
+    },
+    {
+      "id": "ord_1788700412535_pvxak",
+      "orderNumber": "CW-372173",
+      "profileId": "prof_1788439670733_6eyxr",
+      "shippingAddress": {
+        "firstName": "Test",
+        "lastName": "Tamper",
+        "email": "tamper.test@callywear.com",
+        "phone": "+91 98765 43210",
+        "address": "Security Lab Road",
+        "city": "Mumbai",
+        "state": "Maharashtra",
+        "pincode": "400001",
+        "country": "India"
+      },
+      "subtotal": 6999,
+      "shippingFee": 0,
+      "total": 6999,
+      "status": "PLACED",
+      "trackingNumber": null,
+      "carrier": null,
+      "createdAt": "2026-09-06T13:13:32.535Z",
+      "updatedAt": "2026-09-06T13:13:32.535Z"
+    },
+    {
+      "id": "ord_1788700412581_0wpow",
+      "orderNumber": "CW-807135",
+      "profileId": "prof_1788439670749_az9bx",
+      "shippingAddress": {
+        "firstName": "VIP",
+        "lastName": "Member",
+        "email": "vip@callywear.com",
+        "phone": "+91 98765 43210",
+        "address": "VIP Street",
+        "city": "Mumbai",
+        "state": "Maharashtra",
+        "pincode": "400001",
+        "country": "India"
+      },
+      "subtotal": 6999,
+      "shippingFee": 0,
+      "total": 5949,
+      "status": "PLACED",
+      "trackingNumber": null,
+      "carrier": null,
+      "createdAt": "2026-09-06T13:13:32.581Z",
+      "updatedAt": "2026-09-06T13:13:32.581Z"
+    },
+    {
+      "id": "ord_1788700412600_wffnd",
+      "orderNumber": "CW-477671",
+      "profileId": "prof_1788439670754_y3yo9",
+      "shippingAddress": {
+        "firstName": "Idempotent",
+        "lastName": "User",
+        "email": "idemp@callywear.com",
+        "phone": "+91 98765 43210",
+        "address": "Idempotent Towers",
+        "city": "Mumbai",
+        "state": "Maharashtra",
+        "pincode": "400001",
+        "country": "India"
+      },
+      "subtotal": 6999,
+      "shippingFee": 0,
+      "total": 6999,
+      "status": "PLACED",
+      "trackingNumber": null,
+      "carrier": null,
+      "createdAt": "2026-09-06T13:13:32.600Z",
+      "updatedAt": "2026-09-06T13:13:32.600Z"
+    },
+    {
+      "id": "ord_1788700418806_sg1w9",
+      "orderNumber": "CW-544889",
+      "profileId": "prof_1788439670733_6eyxr",
+      "shippingAddress": {
+        "firstName": "Test",
+        "lastName": "Tamper",
+        "email": "tamper.test@callywear.com",
+        "phone": "+91 98765 43210",
+        "address": "Security Lab Road",
+        "city": "Mumbai",
+        "state": "Maharashtra",
+        "pincode": "400001",
+        "country": "India"
+      },
+      "subtotal": 6999,
+      "shippingFee": 0,
+      "total": 6999,
+      "status": "PLACED",
+      "trackingNumber": null,
+      "carrier": null,
+      "createdAt": "2026-09-06T13:13:38.806Z",
+      "updatedAt": "2026-09-06T13:13:38.806Z"
+    },
+    {
+      "id": "ord_1788700731919_q1mw2",
+      "orderNumber": "CW-616523",
+      "profileId": "prof_1788439670733_6eyxr",
+      "shippingAddress": {
+        "firstName": "Test",
+        "lastName": "Tamper",
+        "email": "tamper.test@callywear.com",
+        "phone": "+91 98765 43210",
+        "address": "Security Lab Road",
+        "city": "Mumbai",
+        "state": "Maharashtra",
+        "pincode": "400001",
+        "country": "India"
+      },
+      "subtotal": 7999,
+      "shippingFee": 0,
+      "total": 7999,
+      "status": "PLACED",
+      "trackingNumber": null,
+      "carrier": null,
+      "createdAt": "2026-09-06T13:18:51.919Z",
+      "updatedAt": "2026-09-06T13:18:51.919Z"
+    },
+    {
+      "id": "ord_1788700731943_ipkiw",
+      "orderNumber": "CW-594709",
+      "profileId": "prof_1788439670749_az9bx",
+      "shippingAddress": {
+        "firstName": "VIP",
+        "lastName": "Member",
+        "email": "vip@callywear.com",
+        "phone": "+91 98765 43210",
+        "address": "VIP Street",
+        "city": "Mumbai",
+        "state": "Maharashtra",
+        "pincode": "400001",
+        "country": "India"
+      },
+      "subtotal": 7999,
+      "shippingFee": 0,
+      "total": 6799,
+      "status": "PLACED",
+      "trackingNumber": null,
+      "carrier": null,
+      "createdAt": "2026-09-06T13:18:51.943Z",
+      "updatedAt": "2026-09-06T13:18:51.943Z"
+    },
+    {
+      "id": "ord_1788700731952_8ux16",
+      "orderNumber": "CW-743491",
+      "profileId": "prof_1788439670754_y3yo9",
+      "shippingAddress": {
+        "firstName": "Idempotent",
+        "lastName": "User",
+        "email": "idemp@callywear.com",
+        "phone": "+91 98765 43210",
+        "address": "Idempotent Towers",
+        "city": "Mumbai",
+        "state": "Maharashtra",
+        "pincode": "400001",
+        "country": "India"
+      },
+      "subtotal": 7999,
+      "shippingFee": 0,
+      "total": 7999,
+      "status": "PLACED",
+      "trackingNumber": null,
+      "carrier": null,
+      "createdAt": "2026-09-06T13:18:51.952Z",
+      "updatedAt": "2026-09-06T13:18:51.952Z"
     }
   ],
   "orderStatusEvents": [
@@ -1810,6 +1978,62 @@
       "note": "Customer requested cancellation prior to flight.",
       "updatedBy": "profile_admin_root",
       "createdAt": "2026-09-06T12:05:52.136Z"
+    },
+    {
+      "id": "evt_ord_1788700412535_pvxak_0",
+      "orderId": "ord_1788700412535_pvxak",
+      "status": "PLACED",
+      "note": "Order placed by customer",
+      "updatedBy": "system",
+      "createdAt": "2026-09-06T13:13:32.535Z"
+    },
+    {
+      "id": "evt_ord_1788700412581_0wpow_0",
+      "orderId": "ord_1788700412581_0wpow",
+      "status": "PLACED",
+      "note": "Order placed by customer",
+      "updatedBy": "system",
+      "createdAt": "2026-09-06T13:13:32.581Z"
+    },
+    {
+      "id": "evt_ord_1788700412600_wffnd_0",
+      "orderId": "ord_1788700412600_wffnd",
+      "status": "PLACED",
+      "note": "Order placed by customer",
+      "updatedBy": "system",
+      "createdAt": "2026-09-06T13:13:32.600Z"
+    },
+    {
+      "id": "evt_ord_1788700418806_sg1w9_0",
+      "orderId": "ord_1788700418806_sg1w9",
+      "status": "PLACED",
+      "note": "Order placed by customer",
+      "updatedBy": "system",
+      "createdAt": "2026-09-06T13:13:38.806Z"
+    },
+    {
+      "id": "evt_ord_1788700731919_q1mw2_0",
+      "orderId": "ord_1788700731919_q1mw2",
+      "status": "PLACED",
+      "note": "Order placed by customer",
+      "updatedBy": "system",
+      "createdAt": "2026-09-06T13:18:51.919Z"
+    },
+    {
+      "id": "evt_ord_1788700731943_ipkiw_0",
+      "orderId": "ord_1788700731943_ipkiw",
+      "status": "PLACED",
+      "note": "Order placed by customer",
+      "updatedBy": "system",
+      "createdAt": "2026-09-06T13:18:51.943Z"
+    },
+    {
+      "id": "evt_ord_1788700731952_8ux16_0",
+      "orderId": "ord_1788700731952_8ux16",
+      "status": "PLACED",
+      "note": "Order placed by customer",
+      "updatedBy": "system",
+      "createdAt": "2026-09-06T13:18:51.952Z"
     }
   ],
   "orderItems": [
@@ -1884,6 +2108,62 @@
       "variantId": "var_prod_1788696351909_u0hy_1788696351909_1",
       "quantity": 1,
       "priceAtPurchase": 11999
+    },
+    {
+      "id": "item_ord_1788700412535_pvxak_0",
+      "orderId": "ord_1788700412535_pvxak",
+      "productId": "prod_01",
+      "variantId": "var_prod_01_2",
+      "quantity": 1,
+      "priceAtPurchase": 6999
+    },
+    {
+      "id": "item_ord_1788700412581_0wpow_0",
+      "orderId": "ord_1788700412581_0wpow",
+      "productId": "prod_01",
+      "variantId": "var_prod_01_2",
+      "quantity": 1,
+      "priceAtPurchase": 6999
+    },
+    {
+      "id": "item_ord_1788700412600_wffnd_0",
+      "orderId": "ord_1788700412600_wffnd",
+      "productId": "prod_01",
+      "variantId": "var_prod_01_2",
+      "quantity": 1,
+      "priceAtPurchase": 6999
+    },
+    {
+      "id": "item_ord_1788700418806_sg1w9_0",
+      "orderId": "ord_1788700418806_sg1w9",
+      "productId": "prod_01",
+      "variantId": "var_prod_01_2",
+      "quantity": 1,
+      "priceAtPurchase": 6999
+    },
+    {
+      "id": "item_ord_1788700731919_q1mw2_0",
+      "orderId": "ord_1788700731919_q1mw2",
+      "productId": "prod_01",
+      "variantId": "var_prod_01_2",
+      "quantity": 1,
+      "priceAtPurchase": 7999
+    },
+    {
+      "id": "item_ord_1788700731943_ipkiw_0",
+      "orderId": "ord_1788700731943_ipkiw",
+      "productId": "prod_01",
+      "variantId": "var_prod_01_2",
+      "quantity": 1,
+      "priceAtPurchase": 7999
+    },
+    {
+      "id": "item_ord_1788700731952_8ux16_0",
+      "orderId": "ord_1788700731952_8ux16",
+      "productId": "prod_01",
+      "variantId": "var_prod_01_2",
+      "quantity": 1,
+      "priceAtPurchase": 7999
     }
   ],
   "payments": [
@@ -1967,6 +2247,69 @@
       "amountDue": 11999,
       "amountPaid": 11999,
       "updatedAt": "2026-09-06T12:05:52.032Z"
+    },
+    {
+      "id": "pay_ord_1788700412535_pvxak",
+      "orderId": "ord_1788700412535_pvxak",
+      "method": "COD",
+      "status": "PENDING",
+      "amountDue": 6999,
+      "amountPaid": 0,
+      "updatedAt": "2026-09-06T13:13:32.535Z"
+    },
+    {
+      "id": "pay_ord_1788700412581_0wpow",
+      "orderId": "ord_1788700412581_0wpow",
+      "method": "COD",
+      "status": "PENDING",
+      "amountDue": 5949,
+      "amountPaid": 0,
+      "updatedAt": "2026-09-06T13:13:32.581Z"
+    },
+    {
+      "id": "pay_ord_1788700412600_wffnd",
+      "orderId": "ord_1788700412600_wffnd",
+      "method": "COD",
+      "status": "PENDING",
+      "amountDue": 6999,
+      "amountPaid": 0,
+      "updatedAt": "2026-09-06T13:13:32.600Z"
+    },
+    {
+      "id": "pay_ord_1788700418806_sg1w9",
+      "orderId": "ord_1788700418806_sg1w9",
+      "method": "COD",
+      "status": "PENDING",
+      "amountDue": 6999,
+      "amountPaid": 0,
+      "updatedAt": "2026-09-06T13:13:38.806Z"
+    },
+    {
+      "id": "pay_ord_1788700731919_q1mw2",
+      "orderId": "ord_1788700731919_q1mw2",
+      "method": "COD",
+      "status": "PENDING",
+      "amountDue": 7999,
+      "amountPaid": 0,
+      "updatedAt": "2026-09-06T13:18:51.919Z"
+    },
+    {
+      "id": "pay_ord_1788700731943_ipkiw",
+      "orderId": "ord_1788700731943_ipkiw",
+      "method": "COD",
+      "status": "PENDING",
+      "amountDue": 6799,
+      "amountPaid": 0,
+      "updatedAt": "2026-09-06T13:18:51.943Z"
+    },
+    {
+      "id": "pay_ord_1788700731952_8ux16",
+      "orderId": "ord_1788700731952_8ux16",
+      "method": "COD",
+      "status": "PENDING",
+      "amountDue": 7999,
+      "amountPaid": 0,
+      "updatedAt": "2026-09-06T13:18:51.952Z"
     }
   ],
   "paymentLogEvents": [
